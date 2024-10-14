@@ -3,7 +3,7 @@ import 'package:untitled/app%20screen/stress_map.dart';
 import 'package:untitled/app%20screen/user_detail.dart';
 import 'con_blue.dart';
 import 'result.dart';  // result.dart 파일 임포트
-import 'signin.dart';  // signin.dart 파일 임포트
+// import 'signin.dart';  // signin.dart 파일 임포트
 import 'login.dart';   // login.dart 파일 임포트
 import 'mypage.dart';  // 새로운 mypage.dart 파일 임포트
 

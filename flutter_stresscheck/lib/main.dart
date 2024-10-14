@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'app screen/first.dart';
+// import 'package:flutter_native_splash/flutter_native_splash.dart';
+// import 'app screen/first.dart';
 import 'app screen/login.dart';
 
 void main() {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'con_blue.dart';
-import 'first.dart';
+// import 'first.dart';
 import 'signin.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+// import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 class LoginPage extends StatelessWidget {
   @override
