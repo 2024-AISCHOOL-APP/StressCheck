@@ -2,7 +2,7 @@
 # pip install fastapi uvicorn
 
 # 실행 방법
-# uvicorn server.py:app --reload
+# uvicorn server:app --reload
 
 from fastapi import FastAPI  # =Node.js의 express()
 from fastapi.middleware.cors import CORSMiddleware  # =Node.js의 cors 
@@ -11,8 +11,9 @@ app = FastAPI()  # app 객체를 사용하여, FastAPI를 정의하고 사용
 
 origins = ["http://localhost",
            "http://localhost:8000",   
-           "http://192.168.70.63:8000",
-           "http://127.0.0.1:8000"]   # cors  허용할 도메인 정의
+           "http://192.168.70.45:8000",
+           "http://127.0.0.1:8000"
+           ]   # cors  허용할 도메인 정의
 
 
 app.add_middleware(
