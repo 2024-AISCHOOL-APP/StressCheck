@@ -1,8 +1,13 @@
+# import
+# pip install fastapi uvicorn
+
+# 실행 방법
+# uvicorn server.py:app --reload
+
 from fastapi import FastAPI  # =Node.js의 express()
+from fastapi.middleware.cors import CORSMiddleware  # =Node.js의 cors 
 
 app = FastAPI()  # app 객체를 사용하여, FastAPI를 정의하고 사용
-
-from fastapi.middleware.cors import CORSMiddleware  # =Node.js의 cors 
 
 origins = ["http://localhost",
            "http://localhost:8000",   
@@ -21,4 +26,5 @@ app.add_middleware(
 @app.get("/home")
 async def read_home() :
     return {"message" : "패스트API에서 서버 응답 완료"}
+
 
