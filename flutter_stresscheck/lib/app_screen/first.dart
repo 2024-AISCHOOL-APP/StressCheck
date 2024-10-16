@@ -81,17 +81,15 @@ class MeasurementPage extends StatelessWidget {
                   ),
                 ),
                 Container(
-
-
                   margin: EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey , width: 2),
+                    border: Border.all(color: Colors.grey, width: 2),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.3), // 그림자 색상
-                        spreadRadius: 3, // 그림자 퍼짐 정도
-                        blurRadius: 7, // 그림자 흐림 정도
-                        offset: Offset(0, 3), // 그림자의 위치 (x축, y축)
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 3,
+                        blurRadius: 7,
+                        offset: Offset(0, 3),
                       ),
                     ],
                     color: Colors.grey[100],
@@ -114,13 +112,13 @@ class MeasurementPage extends StatelessWidget {
                   height: 70,
                   margin: EdgeInsets.all(5),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey , width: 2),
+                    border: Border.all(color: Colors.grey, width: 2),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.3), // 그림자 색상
-                        spreadRadius: 3, // 그림자 퍼짐 정도
-                        blurRadius: 7, // 그림자 흐림 정도
-                        offset: Offset(0, 3), // 그림자의 위치 (x축, y축)
+                        color: Colors.grey.withOpacity(0.3),
+                        spreadRadius: 3,
+                        blurRadius: 7,
+                        offset: Offset(0, 3),
                       ),
                     ],
                     color: Colors.grey[100],
@@ -129,7 +127,7 @@ class MeasurementPage extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(5),
                     child: ListTile(
-                      title: Text('정보 입력', style: TextStyle(fontSize: 20 , fontWeight: FontWeight.bold)),
+                      title: Text('정보 입력', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -190,54 +188,44 @@ class MeasurementPage extends StatelessWidget {
               ),
             ),
           ),
-        ],
+          // 하단 버튼 추가
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 20.0), // 하단에 여백 추가
+              child: Row(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    Expanded(
+      child: IconButton(
+        icon: Icon(Icons.calendar_today, color: Colors.blue),
+        iconSize: 50.0,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => StressMapPage()),
+          );
+        },
+        tooltip: '캘린더',
       ),
-      // 하단 네비게이션 바 추가
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.grey[100],
-        height: 80,// 하단 앱바 배경색 설정
-        child: Row(
-          children: [
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: Colors.blue[200],
-                  border: Border.all(color: Colors.white, width: 2), // 테두리 설정
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.calendar_today,color: Colors.white),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => StressMapPage()),
-                    );
-                  },
-                  tooltip: '캘린더',
-                ),
-              ),
-            ),
-            SizedBox(width: 16,),
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: Colors.blue[200],
-                  border: Border.all(color: Colors.white, width: 2), // 테두리 설정
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.history ,color: Colors.white,),
-                  onPressed: () {
+    ),
+     // 원하는 간격 유지
+    Expanded(
+      child: IconButton(
+        icon: Icon(Icons.history, color: Colors.blue),
+        iconSize: 50.0,
+        onPressed: () {
+          // 과거 기록 페이지로 이동
+        },
+        tooltip: '과거 기록',
+      ),
+    ),
+  ],
+),
 
-                  },
-                  tooltip: '과거 기록',
-                ),
-              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

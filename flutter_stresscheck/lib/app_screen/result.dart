@@ -2,7 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'stress_map.dart'; // stress_map 페이지 임포트
 
-class ResultPage extends StatelessWidget {
+class ResultPage extends StatefulWidget {
+  @override
+  _ResultPageState createState() => _ResultPageState();
+}
+
+class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    // AnimationController 초기화
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this, // SingleTickerProviderStateMixin을 사용하여 vsync 제공
+    )..repeat(reverse: true);
+
+    // Tween을 사용하여 애니메이션 설정
+    _animation = Tween<double>(begin: 0, end: -20).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose(); // 애니메이션 컨트롤러 해제
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
@@ -71,11 +101,11 @@ class ResultPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start, // 왼쪽 끝 정렬
                         children: [
                           SizedBox(width: 10),
-                          Text('심박수', style: TextStyle(fontSize: 20)),
+                          Text('심박수', style: TextStyle(fontSize: 20,)),
                           SizedBox(width: 8),
                           Text('90',
                               style: TextStyle(
-                                  color: Colors.orange,
+                                  color: Colors.green,
                                   fontSize: 40,
                                   fontWeight: FontWeight.bold)),
                           SizedBox(width: 8),
@@ -90,7 +120,7 @@ class ResultPage extends StatelessWidget {
                           SizedBox(width: 8), // 간격 조절
                           Text('90',
                               style: TextStyle(
-                                  color: Colors.orange,
+                                  color: Colors.green,
                                   fontSize: 40,
                                   fontWeight: FontWeight.bold)),
                           SizedBox(width: 8),
@@ -104,7 +134,7 @@ class ResultPage extends StatelessWidget {
                           Text('체온:  ', style: TextStyle(fontSize: 25)),
                           Text('36.5 ',
                               style: TextStyle(
-                                  color: Colors.orange,
+                                  color: Colors.green,
                                   fontSize: 25,
                                   fontWeight: FontWeight.bold)),
                           Text('도', style: TextStyle(fontSize: 25)),
@@ -118,7 +148,7 @@ class ResultPage extends StatelessWidget {
                           Text('혈압:  ', style: TextStyle(fontSize: 25)),
                           Text('118 ',
                               style: TextStyle(
-                                  color: Colors.orange,
+                                  color: Colors.green,
                                   fontSize: 25,
                                   fontWeight: FontWeight.bold)),
                           Text('mmHg', style: TextStyle(fontSize: 25)),
@@ -168,16 +198,25 @@ class ResultPage extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 60,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.orange)),
+                                    color: Colors.green)),
                           ),
                         ],
                       ),
                       SizedBox(height: 16),
                       Center(
-                        child: Image.asset(
-                          'image/stress_emoji.png',
-                          width: 100,
-                          height: 100,
+                        child: AnimatedBuilder(
+                          animation: _animation,
+                          builder: (context, child) {
+                            return Transform.translate(
+                              offset: Offset(0, _animation.value),
+                              child: child,
+                            );
+                          },
+                          child: Image.asset(
+                            'image/soso.png',
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            height: MediaQuery.of(context).size.width * 0.4,
+                          ),
                         ),
                       ),
                       Center(
