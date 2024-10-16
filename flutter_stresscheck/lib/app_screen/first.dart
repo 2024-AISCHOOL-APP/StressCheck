@@ -159,30 +159,38 @@ class MeasurementPage extends StatelessWidget {
           ],
         ),
       ),
-      body: Center(
-        child: GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ResultPage()),
-            );
-          },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                child: Expanded(
-                  child: Image.asset(
-                    'image/logo.png',
-                    width: MediaQuery.of(context).size.width * 1.0,
-                    height: MediaQuery.of(context).size.width * 0.9,
-                  ),
-                ),
-              ),
-
-            ],
+      body: Stack(
+        children: [
+          // 배경 이미지 추가
+          Image.asset(
+            'image/bg.png',  // 배경 이미지 경로
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            fit: BoxFit.cover, // 이미지가 화면을 덮도록 설정
           ),
-        ),
+          Center(
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ResultPage()),
+                );
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    child: Image.asset(
+                      'image/logo.png',
+                      width: MediaQuery.of(context).size.width * 1.0,
+                      height: MediaQuery.of(context).size.width * 0.9,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
       // 하단 네비게이션 바 추가
       bottomNavigationBar: BottomAppBar(
