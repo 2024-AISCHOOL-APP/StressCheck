@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/app%20screen/stress_map.dart';
-import 'package:untitled/app%20screen/user_detail.dart';
+import 'package:untitled/app_screen/stress_map.dart';
+import 'package:untitled/app_screen/user_detail.dart';
 import 'con_blue.dart';
 import 'result.dart';  // result.dart 파일 임포트
 // import 'signin.dart';  // signin.dart 파일 임포트
