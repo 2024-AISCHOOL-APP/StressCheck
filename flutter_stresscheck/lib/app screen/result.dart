@@ -6,8 +6,7 @@ class ResultPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
-    String formattedTime =
-        DateFormat('MM월 dd일 HH:mm').format(now); // 'MM월 dd일 HH:mm' 형식으로 시간 포맷팅
+    String formattedTime = DateFormat('MM월 dd일 HH:mm').format(now); // 'MM월 dd일 HH:mm' 형식으로 시간 포맷팅
 
     return Scaffold(
       appBar: AppBar(
@@ -25,151 +24,127 @@ class ResultPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 16),
+            SizedBox(height: 16,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   formattedTime, // 현재 시간을 표시
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 25),
                 ),
                 Text(
                   '26세 남성',
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 25),
                 ),
               ],
             ),
             SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Text('심박수', style: TextStyle(fontSize: 20)),
+                    SizedBox(width: 8),
+                    Text('90', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                    SizedBox(width: 8),
+                    Text('BPM', style: TextStyle(fontSize: 20)),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text('산소포화도', style: TextStyle(fontSize: 20)),
+                    SizedBox(width: 8),
+                    Text('90', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                    SizedBox(width: 8),
+                    Text('BPM', style: TextStyle(fontSize: 20)),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    color: Colors.blue,
+                    alignment: Alignment.center,
+                    child: Text('낮음', style: TextStyle(color: Colors.white, fontSize: 18)),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    color: Colors.lightGreen,
+                    alignment: Alignment.center,
+                    child: Text('주의', style: TextStyle(color: Colors.white, fontSize: 18)),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    color: Colors.green,
+                    alignment: Alignment.center,
+                    child: Text('정상', style: TextStyle(color: Colors.white, fontSize: 18)),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    color: Colors.yellow,
+                    alignment: Alignment.center,
+                    child: Text('주의', style: TextStyle(color: Colors.white, fontSize: 18)),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    color: Colors.red,
+                    alignment: Alignment.center,
+                    child: Text('높음', style: TextStyle(color: Colors.white, fontSize: 18)),
+                  ),
+                ),
+              ],
+            ),
             Container(
-              decoration: BoxDecoration(
-                // border: Border.all(color: Colors.black),
-                borderRadius: BorderRadius.circular(12.0),
-                color: Colors.blue[100],
-                boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.4), // 그림자 색상
-                        spreadRadius: 3, // 그림자 퍼짐 정도
-                        blurRadius: 7, // 그림자 흐림 정도
-                        offset: Offset(0, 3), // 그림자의 위치 (x축, y축)
-                      ),
-                    ], 
-              ),
               child: Column(
                 children: [
-                  // 첫 번째 Row (심박수, 산소포화도)
+                  SizedBox(height: 15,),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start, // 왼쪽 끝 정렬
                     children: [
-                      SizedBox(width: 10,),
-                      Text('심박수', style: TextStyle(fontSize: 20)),
-                      SizedBox(width: 8), // 적절한 간격을 위한 SizedBox
-                      Text('90',
-                          style: TextStyle(color: Colors.orange,
-                              fontSize: 40, fontWeight: FontWeight.bold)),
-                      SizedBox(width: 8),
-                      Text('BPM', style: TextStyle(fontSize: 20)),
+                      Text('체온:  ',style: TextStyle(fontSize: 25)),
+                      Text('36.5 ',style: TextStyle(fontSize: 25)),
+                      Text('도',style: TextStyle(fontSize: 25)),
                     ],
                   ),
-
+                  SizedBox(height: 10,),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start, // 왼쪽 끝 정렬
                     children: [
-                      SizedBox(width: 15,),
-                      Text('산소포화도', style: TextStyle(fontSize: 20)),
-                      SizedBox(width: 8), // 간격 조절
-                      Text('90',
-                          style: TextStyle(color: Colors.orange,
-                              fontSize: 40, fontWeight: FontWeight.bold)),
-                      SizedBox(width: 8),
-                      Text('BPM', style: TextStyle(fontSize: 20)),
+                      Text('혈압:  ',style: TextStyle(fontSize: 25)),
+                      Text('118 ',style: TextStyle(fontSize: 25)),
+                      Text('mmHg',style: TextStyle(fontSize: 25)),
                     ],
-                  ),
-
-                  SizedBox(height: 16),
-
-                  // 두 번째 Row (체온, 혈압)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text('체온:  ', style: TextStyle(fontSize: 25)),
-                      Text('36.5 ',
-                          style: TextStyle(color: Colors.orange,
-                              fontSize: 25, fontWeight: FontWeight.bold)),
-                      Text('도', style: TextStyle(fontSize: 25)),
-                      SizedBox(width: 15,),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text('혈압:  ', style: TextStyle(fontSize: 25)),
-                      Text('118 ',
-                          style: TextStyle(color: Colors.orange,
-                              fontSize: 25, fontWeight: FontWeight.bold)),
-                      Text('mmHg', style: TextStyle(fontSize: 25)),
-                      SizedBox(width: 10,),
-                    ],
-                  ),
+                  )
                 ],
               ),
             ),
             SizedBox(height: 16),
             Container(
               decoration: BoxDecoration(
+
                 border: Border.all(color: Colors.black),
                 borderRadius: BorderRadius.circular(12.0),
-                
               ),
               padding: EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('오늘의 스트레스 상태는',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text('보통',
-                                  style: TextStyle(
-                                      fontSize: 36,
-                                      fontWeight: FontWeight.bold)),
-                              Text('  이에요',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text('42',
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                                fontSize: 60,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.orange)),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  Center(
-                    child: Image.asset(
-                      'image/stress_emoji.png',
-                      width: 100,
-                      height: 100,
-                    ),
-                  ),
-                  Center(
-                      child: Text('이런 기분도 나쁘지 않아요.',
-                          style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold), )),
+                  Text('스트레스 지수', style: TextStyle(fontSize: 16)),
+                  Text('높음', style: TextStyle(fontSize: 24, color: Colors.red)),
+                  SizedBox(height: 250, width: double.infinity),
                 ],
               ),
             ),
