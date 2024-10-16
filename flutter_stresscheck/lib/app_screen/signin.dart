@@ -16,6 +16,11 @@ class SignInPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Image.asset(
+              'image/logo.png',
+              width: MediaQuery.of(context).size.width * 1.0,
+              height: MediaQuery.of(context).size.width * 0.4,
+            ),
             TextField(
               decoration: InputDecoration(
                 labelText: '이름',
