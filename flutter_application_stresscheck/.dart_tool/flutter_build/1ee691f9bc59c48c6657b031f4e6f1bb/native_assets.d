@@ -1,1 +1,0 @@
- C:\\Users\\USER\\Desktop\\project\\StressCheck\\flutter_application_stresscheck\\.dart_tool\\flutter_build\\1ee691f9bc59c48c6657b031f4e6f1bb\\native_assets.yaml: 
