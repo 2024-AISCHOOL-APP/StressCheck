@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/white"/> <!-- 배경 색 설정 -->
+    <item>
+        <bitmap
+            android:gravity="center"
+            android:scaleType="fitCenter" <!-- 크기 조절 -->
+            android:src="@drawable/logo"/> <!-- 스플래시 로고 이미지 경로 -->
+    </item>
+</layer-list>
