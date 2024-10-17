@@ -4,7 +4,7 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:scaleType="fitCenter"
-            android:drawable="@drawable/logo"/> <!-- 확장자 없이 올바른 이미지 경로 설정 -->
+            android:scaleType="fitCenter" <!-- 크기 조절 -->
+        android:src="@drawable/splash"/> <!-- 스플래시 로고 이미지 경로 -->
     </item>
 </layer-list>
