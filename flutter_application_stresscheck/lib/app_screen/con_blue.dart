@@ -12,11 +12,7 @@ class _ConBluePageState extends State<ConBluePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue[200],
-        title: Text('블루투스 연결', style: TextStyle(fontSize: 18)),
-        centerTitle: true,
-      ),
+      
       body: Stack(
         children: [
           // 배경 이미지 추가

@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
-import 'con_blue.dart';
-import 'signin.dart';
+import 'package:flutter_application_stresscheck/app_screen/first.dart';
+import 'con_blue.dart'; // 필요에 따라 수정하세요
+import 'signin.dart'; // 회원가입 페이지
 
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue[200],
-        title: Text('로그인', style: TextStyle(fontSize: 18)),
-        centerTitle: true,
-      ),
       body: Stack(
         children: [
           // 배경 이미지 추가
           Image.asset(
-            'image/bg.png',  // 배경 이미지 경로
+            'image/bg.png', // 배경 이미지 경로
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             fit: BoxFit.cover, // 이미지가 화면을 덮도록 설정
@@ -47,28 +43,44 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 32),
-                Row(
+                Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
                       onPressed: () {
+                        print('로그인 버튼 클릭'); // 디버그용 로그 출력
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ConBluePage()),
+                          MaterialPageRoute(builder: (context) => First()),
                         );
                       },
-                      child: Text('로그인'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue[50], // 버튼 배경색
+                        foregroundColor: Colors.black, // 글씨 색
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 32, vertical: 12), // 패딩 설정
+                      ),
+                      child: Text(
+                        '로그인',
+                        style: TextStyle(fontSize: 18),
+                      ),
                     ),
-                    SizedBox(width: 30),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => SignInPage()),
-                        );
-                      },
-                      child: Text('회원가입'),
+                    SizedBox(
+                      height: 8,
                     ),
+                    GestureDetector(
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SignInPage()), // SignUpPage로 이동
+    );
+  },
+  child: Text(
+    "회원가입을 해주세요",
+    style: TextStyle(fontSize: 8),
+  ),
+)
+
                   ],
                 ),
               ],

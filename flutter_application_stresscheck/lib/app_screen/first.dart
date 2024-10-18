@@ -1,233 +1,192 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_stresscheck/app_screen/stress_map.dart';
-import 'package:flutter_application_stresscheck/app_screen/user_detail.dart';
-
-import 'con_blue.dart';
-import 'result.dart';  // result.dart 파일 임포트
-// import 'signin.dart';  // signin.dart 파일 임포트
-import 'login.dart';   // login.dart 파일 임포트
-import 'mypage.dart';  // 새로운 mypage.dart 파일 임포트
-
-void main() {
-  runApp(First());
-}
+import 'package:flutter_application_stresscheck/app_screen/con_blue.dart';
+import 'package:flutter_application_stresscheck/app_screen/past_reslut.dart';
+import 'mypage.dart'; // 마이 페이지 임포트
+import 'stress_map.dart'; // stress_map 페이지 임포트
+import 'result.dart'; // result 페이지 임포트
 
 class First extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Heart Measurement',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MeasurementPage(),
-    );
-  }
-}
-
-class MeasurementPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue[200],
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-          ),
-        ),
-        title: Row(
-          children: [
-            Expanded(child: Container()), // 왼쪽 여백 채우기
-            Text('임재환 님', style: TextStyle(fontSize: 18)), // 오른쪽 끝에 배치
-          ],
-        ),
-        centerTitle: false,
-      ),
-      drawer: Drawer(
-        child: Stack(
-          children: [
-            ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                Container(
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.blue[200],
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(16.0),
-                        child: Text('임재환 님', style: TextStyle(color: Colors.white, fontSize: 18)),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => LoginPage()),
-                          );
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: Text('로그 아웃', style: TextStyle(color: Colors.black, fontSize: 18)),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey, width: 2),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 3,
-                        blurRadius: 7,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: ListTile(
-                      title: Text('마이 페이지', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => MyPage()),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 70,
-                  margin: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey, width: 2),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 3,
-                        blurRadius: 7,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(5),
-                    child: ListTile(
-                      title: Text('정보 입력', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => UserDetailPage()),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ConBluePage()),
-                    );
-                  },
-                  child: Text('블루투스 연결', style: TextStyle(fontSize: 16)),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
       body: Stack(
         children: [
           // 배경 이미지 추가
           Image.asset(
-            'image/bg.png',  // 배경 이미지 경로
+            'image/bg.png', // 배경 이미지 경로
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             fit: BoxFit.cover, // 이미지가 화면을 덮도록 설정
           ),
-          Center(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ResultPage()),
-                );
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    child: Image.asset(
-                      'image/logo.png',
-                      width: MediaQuery.of(context).size.width * 1.0,
-                      height: MediaQuery.of(context).size.width * 0.9,
-                    ),
-                  ),
-                ],
+          Padding(
+            padding: const EdgeInsets.all(16.0), // 화면 전체에 패딩 추가
+            child: SingleChildScrollView( // 스크롤 가능하도록 변경
+              child: Center(
+                child: Column(
+                  children: [
+                    SizedBox(height: 16),
+                    blue_con(context),
+                    SizedBox(height: 16,),
+                    graph(context),
+                    SizedBox(height: 16,),
+                    graph(context),
+                    SizedBox(height: 16,),
+                    graph(context),
+                  ],
+                ),
               ),
-            ),
-          ),
-          // 하단 버튼 추가
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 20.0), // 하단에 여백 추가
-              child: Row(
-  mainAxisAlignment: MainAxisAlignment.center,
-  children: [
-    Expanded(
-      child: IconButton(
-        icon: Icon(Icons.calendar_today, color: Colors.blue),
-        iconSize: 50.0,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => StressMapPage()),
-          );
-        },
-        tooltip: '캘린더',
-      ),
-    ),
-     // 원하는 간격 유지
-    Expanded(
-      child: IconButton(
-        icon: Icon(Icons.history, color: Colors.blue),
-        iconSize: 50.0,
-        onPressed: () {
-          // 과거 기록 페이지로 이동
-        },
-        tooltip: '과거 기록',
-      ),
-    ),
-  ],
-),
-
             ),
           ),
         ],
       ),
+      bottomNavigationBar: _buildCustomBottomAppBar(context),
     );
   }
+}
+
+// BottomNavigationBar를 별도의 위젯으로 분리
+Widget _buildCustomBottomAppBar(BuildContext context) {
+    return BottomNavigationBar(
+      backgroundColor: Colors.white,
+      type: BottomNavigationBarType.fixed, 
+      currentIndex: 2, // 기본 선택된 인덱스는 스트레스 측정 페이지
+      onTap: (index) {
+        // 각 페이지로 네비게이션
+        if (index == 0) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => StressMapPage()),
+          );
+        } else if (index == 1) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ResultPage()),
+          );
+        } else if (index == 2) {
+          
+        } else if (index == 3) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => PastReslut()),
+          );
+        } 
+        else if (index == 4) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => MyPage()),
+          );
+        } 
+      },
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.calendar_today),
+          label: '캘린더',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.check_circle),
+          label: '투데이',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: '홈',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.timelapse_outlined),
+          label: '과거 기록',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.settings),
+          label: '마이 페이지',
+        ),
+      ],
+      selectedItemColor: Colors.blue[300],
+      unselectedItemColor: Colors.grey,
+      selectedFontSize: 14.0, 
+      unselectedFontSize: 14.0,
+      selectedIconTheme: IconThemeData(size: 24),
+      unselectedIconTheme: IconThemeData(size: 24),
+      showUnselectedLabels: true,
+    );
+  }
+
+Widget blue_con(BuildContext context) {
+  return Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20.0),
+      color: Colors.white,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.1),
+          spreadRadius: 2,
+          blurRadius: 3,
+          offset: Offset(0, 0),
+        ),
+      ],
+    ),
+    padding: EdgeInsets.all(16.0),
+    child: Container(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('웨어러블 기기를 연결해 주세요',
+              style: TextStyle(fontSize: 16, )),
+          
+          SizedBox(height: 8),
+          Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ConBluePage()), 
+                    );
+                  },
+                  child: Text('블루투스 연결'),
+                ),
+              ),
+          
+         
+        ],
+      ),
+    ),
+  );
+}
+
+Widget graph(BuildContext context) {
+  return Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20.0),
+      color: Colors.white,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.1),
+          spreadRadius: 2,
+          blurRadius: 3,
+          offset: Offset(0, 0),
+        ),
+      ],
+    ),
+    padding: EdgeInsets.all(16.0),
+    child: Container(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('주간 기록',
+              style: TextStyle(fontSize: 16, )),
+          
+          SizedBox(height: 2),
+          Image.asset(
+          'image/chart.png', // 배경 이미지 경로
+          width: MediaQuery.of(context).size.width*1,
+          height: MediaQuery.of(context).size.height*0.2,
+          fit: BoxFit.cover, // 이미지가 화면을 덮도록 설정
+        ),
+         
+        ],
+      ),
+    ),
+  );
 }
