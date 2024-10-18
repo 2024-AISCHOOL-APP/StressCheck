@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_stresscheck/app_screen/mypage.dart';
 
 class UserDetailPage extends StatefulWidget {
   @override
@@ -14,16 +15,11 @@ class _UserDetailPageState extends State<UserDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue[200],
-        title: Text('정보 입력', style: TextStyle(fontSize: 18)),
-        centerTitle: true,
-      ),
       body: Stack(
         children: [
           // 배경 이미지 추가
           Image.asset(
-            'image/bg.png',  // 배경 이미지 경로
+            'image/bg.png', // 배경 이미지 경로
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             fit: BoxFit.cover, // 이미지가 화면을 덮도록 설정
@@ -137,8 +133,8 @@ class _UserDetailPageState extends State<UserDetailPage> {
                     children: [
                       Text(
                         '${(sleepTimeRange.start % 24).round()}시 ~ ${(sleepTimeRange.end % 24).round()}시',
-                        style:
-                            TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -154,7 +150,14 @@ class _UserDetailPageState extends State<UserDetailPage> {
                 SizedBox(height: 32),
                 Center(
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                MyPage()), // 로그아웃 후 로그인 페이지로 이동
+                      );
+                    },
                     child: Text('저장'),
                   ),
                 ),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_stresscheck/app_screen/past_reslut.dart';
+import 'mypage.dart'; // 마이 페이지 임포트
 import 'package:intl/intl.dart';
 import 'stress_map.dart'; // stress_map 페이지 임포트
+import 'first.dart'; // First 페이지 임포트
 
 class ResultPage extends StatefulWidget {
   @override
@@ -10,6 +13,7 @@ class ResultPage extends StatefulWidget {
 class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+  int currentIndex = 1; // currentIndex 변수 선언 및 초기화
 
   @override
   void initState() {
@@ -17,14 +21,13 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
     // AnimationController 초기화
     _controller = AnimationController(
       duration: const Duration(seconds: 1),
-      vsync: this, // SingleTickerProviderStateMixin을 사용하여 vsync 제공
+      vsync: this,
     )..repeat(reverse: true);
 
     // Tween을 사용하여 애니메이션 설정
-    _animation = Tween<double>(begin: 0, end: -20).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+    _animation = Tween<double>(begin: 0, end: -20).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
   }
 
   @override
@@ -35,213 +38,387 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    String formattedTime =
-        DateFormat('MM월 dd일 HH:mm').format(now); // 'MM월 dd일 HH:mm' 형식으로 시간 포맷팅
-
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue[200],
-        title: Row(
-          children: [
-            Expanded(child: Container()),
-            Text('임재환 님', style: TextStyle(fontSize: 18)),
-          ],
-        ),
-        centerTitle: false,
-      ),
       body: Stack(
         children: [
           // 배경 이미지 추가
           Image.asset(
-            'image/bg.png',  // 배경 이미지 경로
+            'image/bg.png', // 배경 이미지 경로
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             fit: BoxFit.cover, // 이미지가 화면을 덮도록 설정
           ),
           SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      formattedTime, // 현재 시간을 표시
-                      style: TextStyle(
-                          fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      '26세 남성',
-                      style: TextStyle(
-                          fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12.0),
-                    color: Colors.blue[100],
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.4), // 그림자 색상
-                        spreadRadius: 3, // 그림자 퍼짐 정도
-                        blurRadius: 7, // 그림자 흐림 정도
-                        offset: Offset(0, 3), // 그림자의 위치 (x축, y축)
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      // 첫 번째 Row (심박수, 산소포화도)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start, // 왼쪽 끝 정렬
-                        children: [
-                          SizedBox(width: 10),
-                          Text('심박수', style: TextStyle(fontSize: 20,)),
-                          SizedBox(width: 8),
-                          Text('90',
-                              style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.bold)),
-                          SizedBox(width: 8),
-                          Text('BPM', style: TextStyle(fontSize: 20)),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(width: 15),
-                          Text('산소포화도', style: TextStyle(fontSize: 20)),
-                          SizedBox(width: 8), // 간격 조절
-                          Text('90',
-                              style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.bold)),
-                          SizedBox(width: 8),
-                          Text('BPM', style: TextStyle(fontSize: 20)),
-                        ],
-                      ),
-                      SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text('체온:  ', style: TextStyle(fontSize: 25)),
-                          Text('36.5 ',
-                              style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold)),
-                          Text('도', style: TextStyle(fontSize: 25)),
-                          SizedBox(width: 15),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text('혈압:  ', style: TextStyle(fontSize: 25)),
-                          Text('118 ',
-                              style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold)),
-                          Text('mmHg', style: TextStyle(fontSize: 25)),
-                          SizedBox(width: 10),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 16),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  padding: EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('오늘의 스트레스 상태는',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
-                      SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text('보통',
-                                      style: TextStyle(
-                                          fontSize: 36,
-                                          fontWeight: FontWeight.bold)),
-                                  Text('  이에요',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold)),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Text('42',
-                                textAlign: TextAlign.right,
-                                style: TextStyle(
-                                    fontSize: 60,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.green)),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 16),
-                      Center(
-                        child: AnimatedBuilder(
-                          animation: _animation,
-                          builder: (context, child) {
-                            return Transform.translate(
-                              offset: Offset(0, _animation.value),
-                              child: child,
-                            );
-                          },
-                          child: Image.asset(
-                            'image/soso.png',
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            height: MediaQuery.of(context).size.width * 0.4,
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: Text('이런 기분도 나쁘지 않아요.',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold)),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 16),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => StressMapPage()),
-                      );
-                    },
-                    child: Text('캘린더로 이동'),
-                  ),
-                ),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(16.0), // 화면 전체에 패딩 추가
+              child: Column(
+                children: [
+                  SizedBox(height: 16),
+                  _buildStressStatusContainer(context), 
+                  SizedBox(height: 16),
+                  _buildMeasurementContainers(context), // 측정 데이터 컨테이너들
+                  // 스트레스 상태를 보여주는 컨테이너
+                ],
+              ),
             ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: _buildCustomBottomAppBar(context),
+    );
+  }
+
+  // 하단 네비게이션바 커스터마이징
+  Widget _buildCustomBottomAppBar(BuildContext context) {
+  return BottomNavigationBar(
+    backgroundColor: Colors.white,
+    type: BottomNavigationBarType.fixed, // 애니메이션을 제거하여 고정된 스타일 적용
+    currentIndex: currentIndex,
+    onTap: (index) {
+      setState(() {
+        currentIndex = index;
+      });
+      if (index == 0) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => StressMapPage()),
+        );
+      } else if (index == 1) {
+        // 현재 페이지이므로 아무 작업도 하지 않음
+      } else if (index == 2) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => First()),
+        );
+      } else if (index == 3) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => PastReslut()),
+        );
+      } else if (index == 4) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => MyPage()),
+        );
+      }
+    },
+    items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.calendar_today),
+          label: '캘린더',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.check_circle),
+          label: '투데이',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: '홈',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.timelapse_outlined),
+          label: '과거 기록',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.settings),
+          label: '마이 페이지',
+        ),
+      ],
+    selectedItemColor: Colors.blue[300],
+    unselectedItemColor: Colors.grey,
+    selectedFontSize: 14.0, 
+    unselectedFontSize: 14.0,
+
+    // 아이콘 크기도 동일하게 설정
+    selectedIconTheme: IconThemeData(size: 24),
+    unselectedIconTheme: IconThemeData(size: 24),
+    showUnselectedLabels: true,
+  );
+}
+
+
+  // 측정 데이터 컨테이너를 묶어주는 함수
+  Widget _buildMeasurementContainers(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            bpm(context, '심박수', '90', 'BPM'),
+            oxygen(context, '산소포화도', '95', '%'),
+          ],
+        ),
+        SizedBox(height: 16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            temp(context, '체온', '36.5', '도'),
+            blood(context, '혈압', '118', 'mmHg'),
+          ],
+        ),
+      ],
+    );
+  }
+
+  // 측정 데이터 컨테이너를 생성하는 함수
+  Widget bpm(BuildContext context, String title, String value, String unit) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.45,
+      padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 3,
+            offset: Offset(0, 0),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.favorite_border, color: Colors.red, size: 24.0),
+              SizedBox(width: 10),
+              Text(
+                title,
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                value,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(width: 8),
+              Text(unit, style: TextStyle(fontSize: 20,color: Colors.grey[400])),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+  Widget oxygen(BuildContext context, String title, String value, String unit) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.45,
+      padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 3,
+            offset: Offset(0, 0),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.monitor_heart, color: Colors.red, size: 24.0),
+              SizedBox(width: 10),
+              Text(
+                title,
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                value,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(width: 8),
+              Text(unit, style: TextStyle(fontSize: 20,color: Colors.grey[400])),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+  Widget temp(BuildContext context, String title, String value, String unit) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.45,
+      padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 3,
+            offset: Offset(0, 0),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.thermostat, color: Colors.red, size: 24.0),
+              SizedBox(width: 10),
+              Text(
+                title,
+                style: TextStyle(fontSize: 16, ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                value,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(width: 8),
+              Text(unit, style: TextStyle(fontSize: 20,color: Colors.grey[400])),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+  Widget blood(BuildContext context, String title, String value, String unit) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.45,
+      padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 3,
+            offset: Offset(0, 0),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.water_drop_outlined, color: Colors.red, size: 24.0),
+              SizedBox(width: 10),
+              Text(
+                title,
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                value,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(width: 8),
+              Text(unit, style: TextStyle(fontSize: 20,color: Colors.grey[400])),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 스트레스 상태를 보여주는 컨테이너
+  Widget _buildStressStatusContainer(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 3,
+            offset: Offset(0, 0),
+          ),
+        ],
+      ),
+      padding: EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('오늘의 스트레스 상태는',
+              style: TextStyle(fontSize: 20, )),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Container(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text('보통',
+                          style: TextStyle(
+                              fontSize: 36, fontWeight: FontWeight.bold)),
+                      Text('  이에요',
+                          style: TextStyle(
+                              fontSize: 20, )),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Text('102',
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black)),
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
+          Center(
+            child: AnimatedBuilder(
+              animation: _animation,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(0, _animation.value),
+                  child: child,
+                );
+              },
+              child: Image.asset(
+                'image/soso.png',
+                width: MediaQuery.of(context).size.width * 0.4,
+                height: MediaQuery.of(context).size.width * 0.4,
+              ),
+            ),
+          ),
+          Center(
+            child: Text('이런 기분도 나쁘지 않아요.',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           ),
         ],
       ),

@@ -5,16 +5,11 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue[200],
-        title: Text('회원가입', style: TextStyle(fontSize: 18)),
-        centerTitle: true,
-      ),
       body: Stack(
         children: [
           // 배경 이미지 추가
           Image.asset(
-            'image/bg.png',  // 배경 이미지 경로
+            'image/bg.png', // 배경 이미지 경로
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             fit: BoxFit.cover, // 이미지가 화면을 덮도록 설정
@@ -24,11 +19,6 @@ class SignInPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(
-                  'image/logo.png',
-                  width: MediaQuery.of(context).size.width * 1.0,
-                  height: MediaQuery.of(context).size.width * 0.4,
-                ),
                 TextField(
                   decoration: InputDecoration(
                     labelText: '이름',
@@ -67,6 +57,12 @@ class SignInPage extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => LoginPage()),
                       );
                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue[50], // 버튼 배경색
+                      foregroundColor: Colors.black, // 글씨 색
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 32, vertical: 12), // 패딩 설정
+                    ),
                     child: Text('회원가입'),
                   ),
                 ),
