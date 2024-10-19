@@ -1,13 +1,15 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
+from database import SessionLocal, init_db
+from models import MemberModel
 from routers import auth
-from database import init_db
+from fastapi import HTTPException
 
 app = FastAPI()
 
+# CORS 설정
 origins = ["http://localhost", "http://127.0.0.1:8000"]
-
-# test url = http://127.0.0.1:8000/docs#
 
 app.add_middleware(
     CORSMiddleware,
@@ -20,8 +22,47 @@ app.add_middleware(
 # 데이터베이스 초기화
 init_db()
 
+# DB 세션 의존성 설정
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# 홈 경로
 @app.get("/home")
 async def read_home():
     return {"message": "패스트API에서 서버 응답 완료"}
 
-app.include_router(auth.router, prefix="/auth")
+
+# 테스트용
+# 멤버 데이터 삽입 엔드포인트
+@app.post("/members/")
+def create_member(
+    password: str, 
+    name: str, 
+    email: str, 
+    age: int, 
+    gender: str,  # 여전히 문자열로 받습니다
+    db: Session = Depends(get_db)
+):
+    # 유효성 검사: gender가 Enum의 값 중 하나인지 확인
+    if gender not in ('male', 'female', 'other'):
+        raise HTTPException(status_code=400, detail="Invalid gender value")
+
+    new_member = MemberModel(
+        password=password,
+        name=name,
+        email=email,
+        age=age,
+        gender=gender
+    )
+
+    try:
+        db.add(new_member)
+        db.commit()
+        db.refresh(new_member)  # 새로 삽입된 member_id를 가져옵니다
+    except Exception as e:
+        db.rollback()  # 문제가 있을 경우 롤백
+        raise HTTPException(status_code=500, detail=str(e))
