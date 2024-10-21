@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_stresscheck/app_screen/result.dart';
 // import 'package:flutter_native_splash/flutter_native_splash.dart';
 // import 'app screen/first.dart';
 import 'app_screen/login.dart';
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: ResultPage(),
     );
   }
 }
