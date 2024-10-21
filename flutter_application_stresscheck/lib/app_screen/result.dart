@@ -424,7 +424,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
           ),
           Center(
             child: Text('이런 기분도 나쁘지 않아요.',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
           ),
         ],
       ),

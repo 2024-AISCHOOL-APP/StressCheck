@@ -18,7 +18,8 @@ class LoginPage extends StatelessWidget {
               height: MediaQuery.of(context).size.height,
               fit: BoxFit.cover, // 이미지가 화면을 덮도록 설정
             ),
-            SingleChildScrollView( // 스크롤 가능하도록 설정
+            SingleChildScrollView(
+              // 스크롤 가능하도록 설정
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -33,6 +34,10 @@ class LoginPage extends StatelessWidget {
                     SizedBox(height: 64), // 로고 아래에 여백 추가
                     TextField(
                       decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.black), // 선택 시 밑줄 검정색
+                        ),
                         labelText: '아이디',
                         labelStyle: TextStyle(color: Colors.grey),
                       ),
@@ -41,6 +46,10 @@ class LoginPage extends StatelessWidget {
                     TextField(
                       obscureText: true,
                       decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.black), // 선택 시 밑줄 검정색
+                        ),
                         labelStyle: TextStyle(color: Colors.grey),
                         labelText: '비밀번호',
                       ),
@@ -80,7 +89,8 @@ class LoginPage extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => SignInPage()), // 회원가입 페이지로 이동
+                                  builder: (context) =>
+                                      SignInPage()), // 회원가입 페이지로 이동
                             );
                           },
                           child: Text(

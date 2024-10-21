@@ -25,72 +25,73 @@ class MyPage extends StatelessWidget {
               child: SingleChildScrollView(
                 // 스크롤 가능하도록 설정
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                  
                     Image.asset(
                       'image/logo.png',
                       width: MediaQuery.of(context).size.width * 1.0,
                       height: MediaQuery.of(context).size.width * 0.4,
                     ),
-                    SizedBox(height: 24,),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "임재환 님",
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
+                    SizedBox(height: 24),
+                    Center(
+                      child: Text(
+                        "임재환 님",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
                         ),
-                        SizedBox(height: 25),
-                        buildInfoRow('성별', '남성'),
-                        SizedBox(height: 25),
-                        buildInfoRow('나이', '26세'),
-                        SizedBox(height: 25),
-                        buildInfoRow('수면시간', '8 시간'),
-                        SizedBox(height: 25),
-                        buildInfoRow('직업', '백수'),
-                        SizedBox(height: 25),
-                        buildInfoRow('취미', '운동'),
-                        SizedBox(height: 36),
-                        // 정보 수정 버튼 추가
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                _imformation(context); // 정보 수정 메서드 호출
-                              },
-                              style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 32, vertical: 8),
-                                backgroundColor: Colors.blue[50], // 버튼 배경색 변경
-                                foregroundColor: Colors.black, // 글씨 색 변경
-                              ),
-                              child: Text(
-                                '정보 수정',
-                                style: TextStyle(fontSize: 16),
-                              ),
+                      ),
+                    ),
+                    SizedBox(height: 36),
+                    buildInfoRow('성별', '남성'),
+                    SizedBox(height: 16),
+                    buildInfoRow('나이', '26세'),
+                    SizedBox(height: 16),
+                    buildInfoRow('직업', '백수'),
+                    SizedBox(height: 16),
+                    buildInfoRow('취미', '운동'),
+                    SizedBox(height: 16),
+                    buildInfoRow('수면시간', '8 시간'),
+
+                    SizedBox(height: 36),
+                    // 정보 수정 버튼 추가
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            _imformation(context); // 정보 수정 메서드 호출
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 32,
+                              vertical: 8,
                             ),
-                            SizedBox(width: 25),
-                            // 로그아웃 버튼 추가
-                            ElevatedButton(
-                              onPressed: () {
-                                _logout(context); // 로그아웃 메서드 호출
-                              },
-                              style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 32, vertical: 8),
-                                backgroundColor: Colors.blue[50], // 버튼 배경색 변경
-                                foregroundColor: Colors.black, // 글씨 색 변경
-                              ),
-                              child: Text(
-                                '로그아웃',
-                                style: TextStyle(fontSize: 16),
-                              ),
+                            backgroundColor: Colors.blue[50], // 버튼 배경색 변경
+                            foregroundColor: Colors.black, // 글씨 색 변경
+                          ),
+                          child: Text(
+                            '정보 수정',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                        SizedBox(width: 25),
+                        ElevatedButton(
+                          onPressed: () {
+                            _logout(context); // 로그아웃 메서드 호출
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 32,
+                              vertical: 8,
                             ),
-                          ],
+                            backgroundColor: Colors.blue[50], // 버튼 배경색 변경
+                            foregroundColor: Colors.black, // 글씨 색 변경
+                          ),
+                          child: Text(
+                            '로그아웃',
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
                       ],
                     ),
@@ -107,23 +108,33 @@ class MyPage extends StatelessWidget {
 
   // 반복되는 Row 생성을 위한 메소드
   Widget buildInfoRow(String label, String value) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          label,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey, // 밑줄 색상 설정
+            width: 1.0, // 밑줄 두께 설정
+          ),
         ),
-        Text(
-          '   :   ',
-          style: TextStyle(fontSize: 16),
-        ),
-        Text(
-          value,
-          style: TextStyle(fontSize: 16),
-        ),
-      ],
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.w600),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.black,
+              fontWeight: FontWeight.w600
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -131,7 +142,8 @@ class MyPage extends StatelessWidget {
   void _logout(BuildContext context) {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LoginPage()), // 로그아웃 후 로그인 페이지로 이동
+      MaterialPageRoute(
+          builder: (context) => LoginPage()), // 로그아웃 후 로그인 페이지로 이동
     );
   }
 
@@ -139,7 +151,8 @@ class MyPage extends StatelessWidget {
   void _imformation(BuildContext context) {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => UserDetailPage()), // 정보 수정 페이지로 이동
+      MaterialPageRoute(
+          builder: (context) => UserDetailPage()), // 정보 수정 페이지로 이동
     );
   }
 }
