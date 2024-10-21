@@ -3,12 +3,12 @@ from database import Base
 from datetime import datetime
 
 class MemberModel(Base):
-    __tablename__ = "member"
+    __tablename__ = "tb_member"  
 
-    member_id = Column(Integer, primary_key=True, index=True)
-    password = Column(String(255))
-    name = Column(String(100))
-    email = Column(String(100))
-    age = Column(Integer)
-    gender = Column(Enum('male', 'female', 'other'))
-    created_at = Column(DateTime, default=datetime.utcnow)
+    user_id = Column(String(50), primary_key=True, index=True)  
+    user_pw = Column(String(255))
+    user_name = Column(String(100))
+    # email = Column(String(100))
+    # age = Column(Integer)
+    # gender = Column(String(1))
+    # created_at = Column(DateTime, default=datetime.utcnow)

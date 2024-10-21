@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   intl: ^0.17.0 # 여기에 intl 패키지를 추가합니다.
+  http: ^1.2.2
 
 dev_dependencies:
   flutter_test:

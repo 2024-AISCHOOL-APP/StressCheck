@@ -8,8 +8,11 @@ from fastapi import HTTPException
 
 app = FastAPI()
 
+# uvicorn server:app --reload
+
+
 # CORS 설정
-origins = ["http://localhost", "http://127.0.0.1:8000"]
+origins = ["http://localhost", "http://127.0.0.1:8000","http://10.0.2.2:8000"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -30,6 +33,14 @@ def get_db():
     finally:
         db.close()
 
+@app.get("/")
+async def read_root():
+    return {"message": "Welcome to the API!"}
+
+@app.get("/favicon.ico")
+async def favicon():
+    return {"message": "Favicon not found."}
+
 # 홈 경로
 @app.get("/home")
 async def read_home():
@@ -39,7 +50,8 @@ async def read_home():
 # 테스트용
 # 멤버 데이터 삽입 엔드포인트
 @app.post("/members/")
-def create_member(
+def create_tb_member(
+    user_id: str,  
     password: str, 
     name: str, 
     email: str, 
@@ -48,10 +60,16 @@ def create_member(
     db: Session = Depends(get_db)
 ):
     # 유효성 검사: gender가 Enum의 값 중 하나인지 확인
-    if gender not in ('male', 'female', 'other'):
+    if gender not in ('m', 'f', 'o'):
         raise HTTPException(status_code=400, detail="Invalid gender value")
+    
+
+    # 비밀번호 해싱
+    # pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    # hashed_password = pwd_context.hash(password)
 
     new_member = MemberModel(
+        user_id=user_id,  
         password=password,
         name=name,
         email=email,
@@ -66,3 +84,10 @@ def create_member(
     except Exception as e:
         db.rollback()  # 문제가 있을 경우 롤백
         raise HTTPException(status_code=500, detail=str(e))
+    
+    
+
+
+
+
+app.include_router(auth.router, prefix="/auth")
