@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'stress_map.dart'; // stress_map 페이지 임포트
 import 'first.dart'; // First 페이지 임포트
 
+
+// 첫페이지
 class ResultPage extends StatefulWidget {
   @override
   _ResultPageState createState() => _ResultPageState();
@@ -39,30 +41,34 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          // 배경 이미지 추가
-          Image.asset(
-            'image/bg.png', // 배경 이미지 경로
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            fit: BoxFit.cover, // 이미지가 화면을 덮도록 설정
-          ),
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0), // 화면 전체에 패딩 추가
-              child: Column(
-                children: [
-                  SizedBox(height: 16),
-                  _buildStressStatusContainer(context), 
-                  SizedBox(height: 16),
-                  _buildMeasurementContainers(context), // 측정 데이터 컨테이너들
-                  // 스트레스 상태를 보여주는 컨테이너
-                ],
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // 배경 이미지 추가
+            Image.asset(
+              'image/bg.png', // 배경 이미지 경로
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              fit: BoxFit.cover, // 이미지가 화면을 덮도록 설정
+            ),
+            SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0), // 화면 전체에 패딩 추가
+                child: Column(
+                  children: [
+                    blue_con(context),
+                      SizedBox(height: 16),
+                    
+                    _buildStressStatusContainer(context), 
+                    SizedBox(height: 16),
+                    _buildMeasurementContainers(context), // 측정 데이터 컨테이너들
+                    // 스트레스 상태를 보여주는 컨테이너
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: _buildCustomBottomAppBar(context),
     );
@@ -73,27 +79,27 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
   return BottomNavigationBar(
     backgroundColor: Colors.white,
     type: BottomNavigationBarType.fixed, // 애니메이션을 제거하여 고정된 스타일 적용
-    currentIndex: currentIndex,
+    currentIndex: 2,
     onTap: (index) {
       setState(() {
-        currentIndex = index;
+        currentIndex = 2;
       });
       if (index == 0) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => StressMapPage()),
-        );
-      } else if (index == 1) {
-        // 현재 페이지이므로 아무 작업도 하지 않음
-      } else if (index == 2) {
-        Navigator.pushReplacement(
-          context,
           MaterialPageRoute(builder: (context) => First()),
         );
+      } else if (index == 1) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => StressMapPage()),
+        );
+      } else if (index == 2) {
+        
       } else if (index == 3) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => PastReslut()),
+          MaterialPageRoute(builder: (context) => MyPage()),
         );
       } else if (index == 4) {
         Navigator.pushReplacement(
@@ -104,30 +110,30 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
     },
     items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_today),
-          label: '캘린더',
+          icon: Icon(Icons.timelapse_outlined),
+          label: '나의 하루들',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.check_circle),
-          label: '투데이',
+          icon: Icon(Icons.calendar_today_rounded),
+          label: '캘린더',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: '홈',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.timelapse_outlined),
-          label: '과거 기록',
+          icon: Icon(Icons.book),
+          label: '마이 페이지',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.settings),
-          label: '마이 페이지',
+          label: '환경 설정',
         ),
       ],
     selectedItemColor: Colors.blue[300],
     unselectedItemColor: Colors.grey,
-    selectedFontSize: 14.0, 
-    unselectedFontSize: 14.0,
+    selectedFontSize: 8.0, 
+    unselectedFontSize: 8.0,
 
     // 아이콘 크기도 동일하게 설정
     selectedIconTheme: IconThemeData(size: 24),
@@ -163,7 +169,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
   // 측정 데이터 컨테이너를 생성하는 함수
   Widget bpm(BuildContext context, String title, String value, String unit) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.45,
+      width: MediaQuery.of(context).size.width * 0.43,
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.0),
@@ -180,7 +186,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.favorite_border, color: Colors.red, size: 24.0),
               SizedBox(width: 10),
@@ -191,17 +197,17 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 value,
                 style: TextStyle(
                     color: Colors.black,
-                    fontSize: 40,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(width: 8),
-              Text(unit, style: TextStyle(fontSize: 20,color: Colors.grey[400])),
+              SizedBox(width: 6),
+              Text(unit, style: TextStyle(fontSize: 12,color: Colors.grey[400])),
             ],
           ),
         ],
@@ -210,7 +216,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
   }
   Widget oxygen(BuildContext context, String title, String value, String unit) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.45,
+      width: MediaQuery.of(context).size.width * 0.43,
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.0),
@@ -227,7 +233,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.monitor_heart, color: Colors.red, size: 24.0),
               SizedBox(width: 10),
@@ -238,17 +244,17 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 value,
                 style: TextStyle(
                     color: Colors.black,
-                    fontSize: 40,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(width: 8),
-              Text(unit, style: TextStyle(fontSize: 20,color: Colors.grey[400])),
+              SizedBox(width: 6),
+              Text(unit, style: TextStyle(fontSize: 12,color: Colors.grey[400])),
             ],
           ),
         ],
@@ -257,7 +263,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
   }
   Widget temp(BuildContext context, String title, String value, String unit) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.45,
+      width: MediaQuery.of(context).size.width * 0.43,
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.0),
@@ -274,7 +280,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.thermostat, color: Colors.red, size: 24.0),
               SizedBox(width: 10),
@@ -285,17 +291,17 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 value,
                 style: TextStyle(
                     color: Colors.black,
-                    fontSize: 40,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(width: 8),
-              Text(unit, style: TextStyle(fontSize: 20,color: Colors.grey[400])),
+              SizedBox(width: 6),
+              Text(unit, style: TextStyle(fontSize: 12,color: Colors.grey[400])),
             ],
           ),
         ],
@@ -304,7 +310,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
   }
   Widget blood(BuildContext context, String title, String value, String unit) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.45,
+      width: MediaQuery.of(context).size.width * 0.43,
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.0),
@@ -321,7 +327,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.water_drop_outlined, color: Colors.red, size: 24.0),
               SizedBox(width: 10),
@@ -332,17 +338,17 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 value,
                 style: TextStyle(
                     color: Colors.black,
-                    fontSize: 40,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(width: 8),
-              Text(unit, style: TextStyle(fontSize: 20,color: Colors.grey[400])),
+              SizedBox(width: 6),
+              Text(unit, style: TextStyle(fontSize: 12,color: Colors.grey[400])),
             ],
           ),
         ],
@@ -370,7 +376,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('오늘의 스트레스 상태는',
-              style: TextStyle(fontSize: 20, )),
+              style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600 )),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -384,7 +390,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
                               fontSize: 36, fontWeight: FontWeight.bold)),
                       Text('  이에요',
                           style: TextStyle(
-                              fontSize: 20, )),
+                              fontSize: 16, fontWeight: FontWeight.w600)),
                     ],
                   ),
                 ),
@@ -411,8 +417,8 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
               },
               child: Image.asset(
                 'image/soso.png',
-                width: MediaQuery.of(context).size.width * 0.4,
-                height: MediaQuery.of(context).size.width * 0.4,
+                width: MediaQuery.of(context).size.width * 0.5,
+                height: MediaQuery.of(context).size.width * 0.5,
               ),
             ),
           ),
@@ -424,4 +430,132 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
       ),
     );
   }
+}
+
+class ConBluePopup extends StatefulWidget {
+  @override
+  _ConBluePopupState createState() => _ConBluePopupState();
+}
+
+class _ConBluePopupState extends State<ConBluePopup> {
+  bool isConnected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0), // 모서리 둥글게 설정
+        image: DecorationImage(
+          image: AssetImage('image/bg.png'), // 배경 이미지 설정
+          fit: BoxFit.cover, // 이미지가 팝업 크기를 덮도록 설정
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.bluetooth,
+            size: 100,
+            color: isConnected ? Colors.blue : Colors.grey,
+          ),
+          SizedBox(height: 16),
+          Text(
+            isConnected ? '블루투스 연결됨' : '블루투스 연결 필요',
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 32),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue[50], // 버튼 배경색
+              foregroundColor: Colors.black, // 글씨 색
+              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8), // 패딩 설정
+            ),
+            onPressed: () {
+              setState(() {
+                isConnected = !isConnected;
+              });
+
+              if (isConnected) {
+                // 팝업을 닫고 First 페이지로 이동
+                Navigator.pop(context); // 팝업 닫기
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => First()), // First 페이지로 이동
+                );
+              }
+            },
+            child: Text(isConnected ? '연결 해제' : '블루투스 연결'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+Widget blue_con(BuildContext context) {
+  return Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20.0),
+      color: Colors.white,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.1),
+          spreadRadius: 2,
+          blurRadius: 3,
+          offset: Offset(0, 0),
+        ),
+      ],
+    ),
+    padding: EdgeInsets.all(16.0),
+    child: Container(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('웨어러블 기기를 연결해 주세요', style: TextStyle(fontSize: 16)),
+          SizedBox(height: 8),
+          Center(
+            child: SizedBox(
+              width: 200, // 원하는 너비 설정
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue[50], // 버튼 배경색
+                  foregroundColor: Colors.black, // 글씨 색
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                ),
+                onPressed: () {
+                  // 블루투스 페이지를 팝업으로 띄우기
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40.0), // 모서리 더 둥글게
+                        ),
+                        backgroundColor: Colors.transparent, // 흰색 배경 제거
+                        child: Container(
+                          
+                          width: MediaQuery.of(context).size.width * 0.8, // 너비를 화면 너비의 80%로 설정
+                          height: MediaQuery.of(context).size.height * 0.8, // 높이를 화면 높이의 60%로 설정
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40.0),
+                            color: Colors.white,
+                          ),
+                          child: ConBluePopup(), // 블루투스 연결 팝업
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Text('블루투스 연결'),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
