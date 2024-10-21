@@ -91,7 +91,7 @@ class _StressMapPageState extends State<StressMapPage> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: ['월', '화', '수', '목', '금', '토', '일']
           .map((day) => Text(day,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)))
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)))
           .toList(),
     );
   }

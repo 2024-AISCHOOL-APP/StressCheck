@@ -1,21 +1,58 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class SignInPage extends StatelessWidget {
+class SignInPage extends StatefulWidget {
+  @override
+  _SignInPageState createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _userIdController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+
+  Future<void> _register() async {
+    if (_passwordController.text != _confirmPasswordController.text) {
+      // 비밀번호 확인 실패
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('비밀번호가 일치하지 않습니다.')));
+      return;
+    }
+
+final response = await http.post(
+  Uri.parse('http://10.0.2.2:8000/auth/register'),
+  headers: {'Content-Type': 'application/json'},
+  body: json.encode({
+    'user_id': _userIdController.text,
+    'user_name': _nameController.text,
+    'user_pw': _passwordController.text,
+  }),
+);
+
+if (response.statusCode == 200) {
+  // 성공적으로 응답을 받았을 때
+  final Map<String, dynamic> responseData = json.decode(response.body);
+  print(responseData); // 응답 내용 확인
+} else {
+  print("Error: ${response.statusCode} - ${response.body}");
+}
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Stack(
           children: [
-            // 배경 이미지 추가
             Image.asset(
-              'image/bg.png', // 배경 이미지 경로
+              'image/bg.png',
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              fit: BoxFit.cover, // 이미지가 화면을 덮도록 설정
+              fit: BoxFit.cover,
             ),
-            SingleChildScrollView( // 스크롤 가능하도록 설정
+            SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -23,54 +60,24 @@ class SignInPage extends StatelessWidget {
                   children: [
                     SizedBox(height: 64),
                     Text("이름을 입력해주세요", style: TextStyle(fontSize: 16)),
-                    TextField(
-                      decoration: InputDecoration(
-                        labelStyle: TextStyle(color: Colors.grey),
-                        labelText: '이름',
-                      ),
-                    ),
+                    TextField(controller: _nameController),
                     SizedBox(height: 16),
                     Text("아이디를 입력해주세요", style: TextStyle(fontSize: 16)),
-                    TextField(
-                      decoration: InputDecoration(
-                        labelStyle: TextStyle(color: Colors.grey),
-                        labelText: '아이디',
-                      ),
-                    ),
+                    TextField(controller: _userIdController),
                     SizedBox(height: 16),
                     Text("비밀번호를 입력해주세요", style: TextStyle(fontSize: 16)),
-                    TextField(
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelStyle: TextStyle(color: Colors.grey),
-                        labelText: '비밀번호',
-                      ),
-                    ),
+                    TextField(obscureText: true, controller: _passwordController),
                     SizedBox(height: 16),
                     Text("비밀번호를 확인해주세요", style: TextStyle(fontSize: 16)),
-                    TextField(
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelStyle: TextStyle(color: Colors.grey),
-                        labelText: '비밀번호 확인',
-                        
-                      ),
-                    ),
+                    TextField(obscureText: true, controller: _confirmPasswordController),
                     SizedBox(height: 64),
                     Center(
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginPage()),
-                          );
-                        },
+                        onPressed: _register,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue[50], // 버튼 배경색
-                          foregroundColor: Colors.black, // 글씨 색
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 32, vertical: 8), // 패딩 설정
+                          backgroundColor: Colors.blue[50],
+                          foregroundColor: Colors.black,
+                          padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                         ),
                         child: Text('회원가입'),
                       ),
