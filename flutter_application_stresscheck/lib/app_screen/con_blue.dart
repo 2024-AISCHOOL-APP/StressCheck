@@ -11,59 +11,58 @@ class _ConBluePageState extends State<ConBluePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      
-      body: Stack(
-        children: [
-          // 배경 이미지 추가
-          Image.asset(
-            'image/bg.png',  // 배경 이미지 경로
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            fit: BoxFit.cover, // 이미지가 화면을 덮도록 설정
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0), // 모서리 둥글게 설정
+      ),
+      child: Container(
+        
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0), // 모서리 둥글게 설정
+          image: DecorationImage(
+            image: AssetImage('image/bg.png'), // 배경 이미지 설정
+            fit: BoxFit.cover, // 이미지가 팝업 크기를 덮도록 설정
           ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.bluetooth,
-                    size: 100,
-                    color: isConnected ? Colors.blue : Colors.grey,
-                  ),
-                  SizedBox(height: 16),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      isConnected ? '블루투스 연결됨' : '블루투스 연결 필요',
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  SizedBox(height: 32),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        isConnected = !isConnected;
-                      });
-
-                      if (isConnected) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => First()),
-                        );
-                      }
-                    },
-                    child: Text(isConnected ? '연결 해제' : '블루투스 연결'),
-                  ),
-                ],
-              ),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.bluetooth,
+              size: 100,
+              color: isConnected ? Colors.blue : Colors.grey,
             ),
-          ),
-        ],
+            SizedBox(height: 16),
+            Text(
+              isConnected ? '블루투스 연결됨' : '블루투스 연결 필요',
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 32),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue[50], // 버튼 배경색
+                foregroundColor: Colors.black, // 글씨 색
+                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8), // 패딩 설정
+              ),
+              onPressed: () {
+                setState(() {
+                  isConnected = !isConnected;
+                });
+
+                if (isConnected) {
+                  // 팝업을 닫고 First 페이지로 이동
+                  Navigator.pop(context); // 팝업 닫기
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => First()), // First 페이지로 이동
+                  );
+                }
+              },
+              child: Text(isConnected ? '연결 해제' : '블루투스 연결'),
+            ),
+          ],
+        ),
       ),
     );
   }
