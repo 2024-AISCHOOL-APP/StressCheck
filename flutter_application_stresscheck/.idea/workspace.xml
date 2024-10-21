@@ -5,7 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="31a46bf5-771e-4d20-8306-658d50eed040" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../flutter_stresscheck/android/app/src/main/res/drawable/launch_background.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../flutter_stresscheck/android/app/src/main/res/drawable/launch_background.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../abcd/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/../abcd/.dart_tool/package_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../abcd/.dart_tool/package_config_subset" beforeDir="false" afterPath="$PROJECT_DIR$/../abcd/.dart_tool/package_config_subset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../abcd/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/../abcd/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../fastapi_server/routers/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/../fastapi_server/routers/auth.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app_screen/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app_screen/login.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/app_screen/signin.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/app_screen/signin.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,9 +37,21 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 7
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "startho"
+  }
 }]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/2024-AISCHOOL-APP/StressCheck.git",
+    "accountId": "d1586577-bb6b-4ab6-b6c4-64a16a9cff45"
+  }
+}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
   <component name="ProjectId" id="2nVp8C2joHLeVdmOt5OA1yWEuLT" />
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1" />
@@ -57,13 +75,19 @@
     "cidr.known.project.marker": "true",
     "com.google.services.firebase.aqiPopupShown": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "jep",
+    "git-widget-placeholder": "yujeong",
     "io.flutter.reload.alreadyRun": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/USER/Desktop/project/StressCheck/flutter_application_stresscheck",
+    "last_opened_file_path": "C:/Users/USER/Documents/GitHub/StressCheck/flutter_application_stresscheck",
     "show.migrate.to.gradle.popup": "false"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
+      <option name="filePath" value="$PROJECT_DIR$/lib/main.dart" />
+      <method v="2" />
+    </configuration>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">

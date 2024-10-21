@@ -1,10 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_stresscheck/app_screen/first.dart';
 import 'package:flutter_application_stresscheck/app_screen/past_reslut.dart';
-import 'con_blue.dart'; // 필요에 따라 수정하세요
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'signin.dart'; // 회원가입 페이지
 
 class LoginPage extends StatelessWidget {
+  final TextEditingController _userIdController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  // 로그인 메서드
+Future<void> _login(BuildContext context) async {
+  final response = await http.post(
+    Uri.parse('http://10.0.2.2:8000/auth/login'),
+    headers: {'Content-Type': 'application/json'},
+    body: json.encode({
+      'user_id': _userIdController.text,
+      'user_pw': _passwordController.text,
+    }),
+  );
+
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> responseData = json.decode(response.body);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(responseData['message'] ?? '로그인 성공'),
+    ));
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => PastReslut()),
+    );
+  } else {
+    final Map<String, dynamic> responseData = json.decode(response.body);
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(responseData['detail'] ?? '로그인 실패'),
+    ));
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,10 +66,10 @@ class LoginPage extends StatelessWidget {
                     ),
                     SizedBox(height: 64), // 로고 아래에 여백 추가
                     TextField(
+                      controller: _userIdController, // 텍스트 필드에 컨트롤러 추가
                       decoration: InputDecoration(
                         focusedBorder: UnderlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.black), // 선택 시 밑줄 검정색
+                          borderSide: BorderSide(color: Colors.black), // 선택 시 밑줄 검정색
                         ),
                         labelText: '아이디',
                         labelStyle: TextStyle(color: Colors.grey),
@@ -44,11 +77,11 @@ class LoginPage extends StatelessWidget {
                     ),
                     SizedBox(height: 16),
                     TextField(
+                      controller: _passwordController, // 텍스트 필드에 컨트롤러 추가
                       obscureText: true,
                       decoration: InputDecoration(
                         focusedBorder: UnderlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.black), // 선택 시 밑줄 검정색
+                          borderSide: BorderSide(color: Colors.black), // 선택 시 밑줄 검정색
                         ),
                         labelStyle: TextStyle(color: Colors.grey),
                         labelText: '비밀번호',
@@ -61,19 +94,11 @@ class LoginPage extends StatelessWidget {
                         SizedBox(
                           width: 200, // 원하는 너비 설정
                           child: ElevatedButton(
-                            onPressed: () {
-                              print('로그인 버튼 클릭'); // 디버그용 로그 출력
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PastReslut()),
-                              );
-                            },
+                            onPressed: () => _login(context), // 로그인 기능 호출
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue[50], // 버튼 배경색
                               foregroundColor: Colors.black, // 글씨 색
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 32, vertical: 8), // 패딩 설정
+                              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8), // 패딩 설정
                             ),
                             child: Text(
                               '로그인',
@@ -81,16 +106,12 @@ class LoginPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 8,
-                        ),
+                        SizedBox(height: 8),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      SignInPage()), // 회원가입 페이지로 이동
+                              MaterialPageRoute(builder: (context) => SignInPage()), // 회원가입 페이지로 이동
                             );
                           },
                           child: Text(

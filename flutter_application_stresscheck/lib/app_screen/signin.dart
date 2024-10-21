@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
+import 'login.dart'; // 로그인 페이지로 이동하기 위한 import
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -16,14 +16,15 @@ class _SignInPageState extends State<SignInPage> {
 
   Future<void> _register() async {
     if (_passwordController.text != _confirmPasswordController.text) {
-      // 비밀번호 확인 실패
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('비밀번호가 일치하지 않습니다.')));
       return;
     }
 
-final response = await http.post(
+    final response = await http.post(
   Uri.parse('http://10.0.2.2:8000/auth/register'),
-  headers: {'Content-Type': 'application/json'},
+  headers: {
+    'Content-Type': 'application/json; charset=utf-8',
+  },
   body: json.encode({
     'user_id': _userIdController.text,
     'user_name': _nameController.text,
@@ -31,13 +32,20 @@ final response = await http.post(
   }),
 );
 
-if (response.statusCode == 200) {
+
+    if (response.statusCode == 200) {
   // 성공적으로 응답을 받았을 때
-  final Map<String, dynamic> responseData = json.decode(response.body);
-  print(responseData); // 응답 내용 확인
+  final Map<String, dynamic> responseData = json.decode(utf8.decode(response.bodyBytes));
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(responseData['message'])));
+  
+  // 로그인 페이지로 이동
+  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
 } else {
-  print("Error: ${response.statusCode} - ${response.body}");
+  final errorData = json.decode(utf8.decode(response.bodyBytes));
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('회원가입 실패: ${errorData['detail']}')));
+  print("Error: ${response.statusCode} - ${errorData['detail']}");
 }
+
   }
 
   @override
