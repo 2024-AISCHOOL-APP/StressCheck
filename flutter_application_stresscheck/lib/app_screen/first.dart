@@ -196,7 +196,7 @@ Widget graph(BuildContext context) {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text('주간 기록', style: TextStyle(fontSize: 16)),
+          Text('주간 기록', style: TextStyle(fontSize: 16 , fontWeight: FontWeight.w600)),
           SizedBox(height: 2),
           Image.asset(
             'image/chart.png', // 배경 이미지 경로
