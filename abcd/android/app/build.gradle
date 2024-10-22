@@ -5,6 +5,23 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+// 레파토지리에 flatDir 추가
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+// 디펜던시 추가, 디펜던시가 없어서 직접 씀
+dependencies {
+    implementation(name: 'crpblelib-1.4.9', ext: 'aar')
+    // 또는 모든 AAR 파일을 포함시키려면
+    // implementation fileTree(dir: 'libs', include: ['*.aar'])
+    // 다른 의존성들...
+}
+
+
+
 android {
     namespace = "com.example.abcd"
     compileSdk = flutter.compileSdkVersion
