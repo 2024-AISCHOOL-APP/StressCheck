@@ -5,10 +5,16 @@ import 'package:flutter_application_stresscheck/app_screen/past_reslut.dart';
 import 'package:flutter_application_stresscheck/app_screen/result.dart';
 import 'package:flutter_application_stresscheck/app_screen/stress_map.dart';
 import 'package:flutter_application_stresscheck/app_screen/user_detail.dart';
+import 'package:provider/provider.dart';  // Provider 사용
+import 'auth_provider.dart';  // AuthProvider import
 
 class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // 로그인된 사용자 정보를 가져오기
+    final authProvider = Provider.of<AuthProvider>(context);
+    final String? userName = authProvider.userName;  // 로그인된 사용자의 이름
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -35,7 +41,7 @@ class MyPage extends StatelessWidget {
                     SizedBox(height: 24),
                     Center(
                       child: Text(
-                        "임재환 님",
+                        userName != null ? "$userName 님" : "사용자 이름 불러오는 중...",  // 사용자 이름 표시
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w600,
