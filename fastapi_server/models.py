@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, Date,PrimaryKeyConstraint,TIMESTAMP
 from sqlalchemy.orm import relationship
 from database import Base
 from datetime import datetime
@@ -6,26 +6,31 @@ from datetime import datetime
 class MemberModel(Base):
     __tablename__ = "tb_member"
 
-    user_id = Column(String(50), primary_key=True, index=True)
-    user_pw = Column(String(255))
-    user_name = Column(String(100))
-    user_gender = Column(String(1))  # 성별 M 또는 F
-    user_birthdate = Column(String(10))  # 생년월일 YYYY-MM-DD 형식
-    user_job = Column(String(100))  # 직업
-    user_sleep = Column(Integer)  # 수면 시간 (시간 단위)
-    joined_at = Column(DateTime, default=datetime.utcnow)
+    user_id = Column(String(50), primary_key=True, index=True)  # VARCHAR
+    user_pw = Column(String(255))  # VARCHAR
+    user_name = Column(String(100))  # VARCHAR
+    user_email = Column(String(100))  # VARCHAR
+    user_birthdate = Column(Date)  # DATE
+    user_gender = Column(String(1))  # CHAR (M 또는 F)
+    joined_at = Column(TIMESTAMP, default=datetime.utcnow)  # TIMESTAMP
+    user_job = Column(String(100))  # VARCHAR
+    user_sleep = Column(Integer)  # INT
+    user_point = Column(Integer)  # INT
 
     # 취미와의 관계 설정
     hobbies = relationship("HobbyModel", back_populates="member")
 
-
 class HobbyModel(Base):
     __tablename__ = "tb_hobby"
 
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(String(50), ForeignKey("tb_member.user_id"))  # 회원 테이블과 연결
-    hobby_idx = Column(Integer)  # 취미 인덱스 (1, 2, 3)
+    hobby_idx = Column(Integer, index=True)  # 인덱스로만 사용
+    user_id = Column(String(50), ForeignKey("tb_member.user_id"))  # tb_member 테이블과 연결
     user_hobby = Column(String(100))  # 취미 이름
 
-    # 회원과의 관계 설정
+    # 복합 기본키 설정 (user_id와 hobby_idx를 복합키로 설정)
+    __table_args__ = (
+        PrimaryKeyConstraint('user_id', 'hobby_idx'),
+    )
+
+    # 관계 설정 (필요 시)
     member = relationship("MemberModel", back_populates="hobbies")
