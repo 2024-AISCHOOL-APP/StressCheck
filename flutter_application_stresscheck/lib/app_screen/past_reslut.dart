@@ -4,11 +4,17 @@ import 'package:flutter_application_stresscheck/app_screen/login.dart';
 import 'mypage.dart'; // 마이 페이지 임포트
 import 'stress_map.dart'; // stress_map 페이지 임포트
 import 'result.dart'; // result 페이지 임포트
+import 'package:provider/provider.dart'; // Provider 사용
+import 'auth_provider.dart'; // AuthProvider import
 
 // 환경설정
 class PastReslut extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // 로그인 상태 확인을 위해 AuthProvider 사용
+    final authProvider = Provider.of<AuthProvider>(context);
+    final bool isLoggedIn = authProvider.isLoggedIn; // 로그인 상태 여부 확인
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -63,21 +69,31 @@ class PastReslut extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 32,),
+                      // 로그인 상태에 따라 로그인/로그아웃 버튼 동적 생성
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.7, // 원하는 너비 설정
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => LoginPage()),
-                            );
+                            if (isLoggedIn) {
+                              authProvider.logout(); // 로그아웃 처리
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => LoginPage()),
+                              );
+                            } else {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => LoginPage()),
+                              );
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue[50], // 버튼 배경색
                             foregroundColor: Colors.black, // 글씨 색
                             padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8), // 패딩 설정
                           ),
-                          child: Text('로그인', style: TextStyle(fontSize: 16)),
+                          // 로그인 상태에 따라 버튼 텍스트 변경
+                          child: Text(isLoggedIn ? '로그아웃' : '로그인', style: TextStyle(fontSize: 16)),
                         ),
                       ),
                     ],
@@ -98,7 +114,7 @@ Widget _buildCustomBottomAppBar(BuildContext context) {
   return BottomNavigationBar(
     backgroundColor: Colors.white,
     type: BottomNavigationBarType.fixed,
-    currentIndex: 4, // 기본 선택된 인덱스는 스트레스 측정 페이지
+    currentIndex: 4, // 기본 선택된 인덱스는 환경 설정 페이지
     onTap: (index) {
       // 각 페이지로 네비게이션
       if (index == 0) {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_stresscheck/app_screen/auth_provider.dart';
-import 'package:provider/provider.dart';  // Provider 사용을 위해 import
 import 'package:flutter_application_stresscheck/app_screen/mypage.dart';
+import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'auth_provider.dart'; // AuthProvider import
 
 class UserDetailPage extends StatefulWidget {
   @override
@@ -11,39 +11,77 @@ class UserDetailPage extends StatefulWidget {
 }
 
 class _UserDetailPageState extends State<UserDetailPage> {
-  String gender = ""; // 성별 정보 저장
+  String gender = "남성"; // 기본 성별 설정
   DateTime birthDate = DateTime(2000, 1, 1); // 기본 생년월일 설정
-  RangeValues sleepTimeRange = RangeValues(18.0, 42.0); // 18시부터 다음날 18시로 초기 설정
-  String selectedJob = ""; // 선택된 직업
-  List<String> jobList = ["태초마을 오박사", "지우라고 했지!", "챔피언 레드", "버려진 피죤투", "레드의 거북왕", "레드 친구 그린", "로켓단 간부", "로켓단 마자용", "강가의 잉어킹"]; // 미리 정의된 직업 리스트
-  List<String> hobbies = [""]; // 취미 저장 리스트
-  final int maxHobbies = 3; // 최대 취미 개수
+  RangeValues sleepTimeRange = RangeValues(18.0, 24.0); // 기본 수면 시간 범위 설정
+  String selectedJob = ""; // 기본 직업 설정
+
+  final List<String> jobList = [
+    "태초마을 오박사",
+    "지우라고 했지!",
+    "챔피언 레드",
+    "버려진 피죤투",
+    "레드의 거북왕",
+    "레드 친구 그린",
+    "로켓단 간부",
+    "로켓단 마자용",
+    "강가의 잉어킹"
+  ]; // 미리 정의된 직업 리스트
+
+  @override
+  void initState() {
+    super.initState();
+
+    // AuthProvider에서 저장된 값들을 불러와 초기화
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      
+      setState(() {
+        gender = authProvider.userGender != null
+            ? (authProvider.userGender == "M" ? "남성" : "여성")
+            : "남성"; // 성별 초기화 (null일 경우 남성)
+
+        // 생년월일이 null이면 기본값, 아니면 값 설정
+        if (authProvider.userBirthdate != null) {
+          String normalizedBirthDate = normalizeDateFormat(authProvider.userBirthdate!);
+          birthDate = DateTime.parse(normalizedBirthDate); // 생년월일 설정
+        } else {
+          birthDate = DateTime(2000, 1, 1); // 기본 생년월일 설정
+        }
+
+        // 직업이 null일 경우 기본값 처리
+        selectedJob = authProvider.userJob ?? "";
+
+        // 수면 시간 범위 설정 (null일 경우 기본값 사용)
+        double sleepStart = 18.0; // 18시부터 기본 설정
+        double sleepEnd = sleepStart + (authProvider.userSleep?.toDouble() ?? 6.0); // 기본 수면시간 6시간
+        sleepTimeRange = RangeValues(sleepStart, sleepEnd.clamp(18.0, 42.0)); // 범위 체크 및 설정
+      });
+    });
+  }
+
+  String normalizeDateFormat(String date) {
+    List<String> parts = date.split('-');
+    if (parts[1].length == 1) parts[1] = '0' + parts[1]; // 월이 한 자리면 앞에 0을 추가
+    if (parts[2].length == 1) parts[2] = '0' + parts[2]; // 일이 한 자리면 앞에 0을 추가
+    return parts.join('-');
+  }
 
   Future<void> _saveUserDetails() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final String? userId = authProvider.userId;  // 로그인한 사용자의 userId
+    final String? userId = authProvider.userId;
 
     if (userId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('로그인이 필요합니다.')),
       );
-      return; // userId가 없으면 저장 불가
+      return;
     }
 
     String genderValue = (gender == "남성") ? "M" : "F"; // 성별 변환
     int sleepDuration = sleepTimeRange.end > sleepTimeRange.start
         ? (sleepTimeRange.end - sleepTimeRange.start).round()
-        : (24 - sleepTimeRange.start + sleepTimeRange.end).round(); // 수면시간 계산
-
-    List<Map<String, dynamic>> hobbiesData = [];
-    for (int i = 0; i < hobbies.length; i++) {
-      if (hobbies[i].isNotEmpty) {
-        hobbiesData.add({
-          'hobby_idx': i + 1,  // 인덱스는 1부터 시작
-          'user_hobby': hobbies[i]
-        });
-      }
-    }
+        : (24 - sleepTimeRange.start + sleepTimeRange.end).round();
 
     final response = await http.post(
       Uri.parse('http://10.0.2.2:8000/auth/user/update'),
@@ -56,13 +94,18 @@ class _UserDetailPageState extends State<UserDetailPage> {
         'user_birthdate': '${birthDate.year}-${birthDate.month}-${birthDate.day}',
         'user_job': selectedJob,
         'user_sleep': sleepDuration,
-        'hobbies': hobbiesData,  // 취미 데이터를 리스트로 보냄
       }),
     );
 
     if (response.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('회원 정보가 저장되었습니다.')),
+      );
+      authProvider.updateUserDetails(
+        genderValue,
+        '${birthDate.year}-${birthDate.month}-${birthDate.day}',
+        selectedJob,
+        sleepDuration,
       );
     } else {
       final errorData = json.decode(utf8.decode(response.bodyBytes));
@@ -81,10 +124,10 @@ class _UserDetailPageState extends State<UserDetailPage> {
           children: [
             // 배경 이미지 추가
             Image.asset(
-              'image/bg.png', // 배경 이미지 경로
+              'image/bg.png',
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              fit: BoxFit.cover, // 이미지가 화면을 덮도록 설정
+              fit: BoxFit.cover,
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -106,21 +149,6 @@ class _UserDetailPageState extends State<UserDetailPage> {
                       onBirthDateChanged: (value) {
                         setState(() {
                           birthDate = value;
-                        });
-                      },
-                    ),
-                    SizedBox(height: 16),
-                    HobbiesInput(
-                      hobbies: hobbies,
-                      maxHobbies: maxHobbies,
-                      onHobbyChanged: (index, value) {
-                        setState(() {
-                          hobbies[index] = value;
-                          if (value.isNotEmpty &&
-                              index == hobbies.length - 1 &&
-                              hobbies.length < maxHobbies) {
-                            hobbies.add(""); // 자동으로 새로운 취미 필드 추가
-                          }
                         });
                       },
                     ),
@@ -151,7 +179,13 @@ class _UserDetailPageState extends State<UserDetailPage> {
                           foregroundColor: Colors.black,
                           padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                         ),
-                        onPressed: _saveUserDetails, // 저장 버튼 눌렀을 때
+                        onPressed: () async {
+                          await _saveUserDetails();
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => MyPage()),
+                          );
+                        },
                         child: Text('저장', style: TextStyle(fontSize: 16)),
                       ),
                     ),
@@ -165,6 +199,8 @@ class _UserDetailPageState extends State<UserDetailPage> {
     );
   }
 }
+
+// GenderSelection, AgeInput, JobSelection, SleepTimeSlider 구현
 
 class GenderSelection extends StatelessWidget {
   final String selectedGender;
@@ -291,53 +327,6 @@ class JobSelection extends StatelessWidget {
             },
           ),
         ),
-      ],
-    );
-  }
-}
-
-class HobbiesInput extends StatelessWidget {
-  final List<String> hobbies;
-  final int maxHobbies;
-  final Function(int, String) onHobbyChanged;
-
-  const HobbiesInput({
-    required this.hobbies,
-    required this.maxHobbies,
-    required this.onHobbyChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ...List.generate(hobbies.length, (index) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Row(
-              children: [
-                Text('취미 ${index + 1}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                SizedBox(width: 16),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none, // 테두리 없음
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black), // 선택 시 밑줄 검정색
-                      ),
-                      labelText: '취미 입력',
-                      labelStyle: TextStyle(color: Colors.grey),
-                    ),
-                    onChanged: (value) {
-                      onHobbyChanged(index, value);
-                    },
-                  ),
-                ),
-              ],
-            ),
-          );
-        }),
       ],
     );
   }

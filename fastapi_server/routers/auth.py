@@ -65,8 +65,17 @@ async def login(user: UserLogin, db: Session = Depends(get_db)):
             media_type="application/json; charset=utf-8"
         )
 
+    # 추가된 사용자 정보 반환
     return JSONResponse(
-        content={"message": "로그인 성공", "user_id": db_user.user_id, "user_name": db_user.user_name},
+        content={
+            "message": "로그인 성공", 
+            "user_id": db_user.user_id, 
+            "user_name": db_user.user_name,
+            "user_gender": db_user.user_gender,
+            "user_birthdate": db_user.user_birthdate.strftime('%Y-%m-%d') if db_user.user_birthdate else None,
+            "user_job": db_user.user_job,
+            "user_sleep": db_user.user_sleep
+        },
         media_type="application/json; charset=utf-8"
     )
 
@@ -147,4 +156,25 @@ async def update_hobby(hobby: HobbyUpdate, db: Session = Depends(get_db)):
 
     except Exception as e:
         db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get("/user/{user_id}")
+async def get_user_details(user_id: str, db: Session = Depends(get_db)):
+    try:
+        db_member = db.query(MemberModel).filter(MemberModel.user_id == user_id).first()
+        if not db_member:
+            raise HTTPException(status_code=404, detail="사용자를 찾을 수 없습니다.")
+        
+        user_data = {
+            "user_id": db_member.user_id,
+            "user_name": db_member.user_name,
+            "user_gender": db_member.user_gender,
+            "user_birthdate": db_member.user_birthdate,
+            "user_job": db_member.user_job,
+            "user_sleep": db_member.user_sleep,
+        }
+
+        return JSONResponse(content=user_data, media_type="application/json; charset=utf-8")
+
+    except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
