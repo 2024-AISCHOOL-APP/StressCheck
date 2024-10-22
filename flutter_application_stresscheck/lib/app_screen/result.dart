@@ -104,7 +104,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
       } else if (index == 4) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => MyPage()),
+          MaterialPageRoute(builder: (context) => PastReslut()),
         );
       }
     },
