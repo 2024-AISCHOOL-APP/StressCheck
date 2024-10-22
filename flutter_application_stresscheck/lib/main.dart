@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_stresscheck/app_screen/auth_provider.dart';
 import 'package:flutter_application_stresscheck/app_screen/result.dart';
-// import 'package:flutter_native_splash/flutter_native_splash.dart';
-// import 'app screen/first.dart';
-import 'app_screen/login.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
