@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_stresscheck/app_screen/first.dart';
 import 'package:flutter_application_stresscheck/app_screen/past_reslut.dart';
+import 'package:flutter_application_stresscheck/app_screen/result.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'signin.dart'; // 회원가입 페이지
@@ -27,7 +28,7 @@ Future<void> _login(BuildContext context) async {
     ));
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => PastReslut()),
+      MaterialPageRoute(builder: (context) => ResultPage()),
     );
   } else {
     final Map<String, dynamic> responseData = json.decode(response.body);

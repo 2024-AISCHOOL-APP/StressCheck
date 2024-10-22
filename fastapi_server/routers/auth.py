@@ -11,7 +11,7 @@ from fastapi.responses import JSONResponse
 app = FastAPI()
 router = APIRouter()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-origins = ["http://localhost", "http://127.0.0.1:8000","http://10.0.2.2:8000"]
+origins = ["http://localhost", "http://127.0.0.1:8000","http://10.0.2.2:8000","http://115.95.222.202"]
 
 app.add_middleware(
     CORSMiddleware,
