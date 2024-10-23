@@ -5,6 +5,8 @@ from models import MemberModel, HobbyModel
 from pydantic import BaseModel
 from passlib.context import CryptContext
 from fastapi.responses import JSONResponse
+from models import AnalysisModel  # AnalysisModel을 models에서 가져오기
+
 
 router = APIRouter()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -48,8 +50,10 @@ def get_db():
         db.close()
 
 # 로그인 엔드포인트
+# 로그인 엔드포인트
 @router.post("/login")
 async def login(user: UserLogin, db: Session = Depends(get_db)):
+    # 로그인한 사용자 찾기
     db_user = db.query(MemberModel).filter(MemberModel.user_id == user.user_id).first()
     if not db_user:
         return JSONResponse(
@@ -58,14 +62,26 @@ async def login(user: UserLogin, db: Session = Depends(get_db)):
             media_type="application/json; charset=utf-8"
         )
     
+    # 비밀번호 검증
     if not pwd_context.verify(user.user_pw, db_user.user_pw):
         return JSONResponse(
             status_code=400,
             content={"detail": "로그인 정보가 잘못되었습니다."},
             media_type="application/json; charset=utf-8"
         )
+    
+    # 스트레스 분석 정보 불러오기
+    analysis_data = db.query(AnalysisModel).filter(AnalysisModel.user_id == db_user.user_id).all()
+    analysis_list = [
+        {
+            "stress_index": float(a.stress_index),  # Decimal을 float으로 변환
+            "analysis_result": a.analysis_result,
+            "analysis_details": a.analysis_details,
+            "created_at": a.created_at.strftime('%Y-%m-%d %H:%M:%S') if a.created_at else None  # datetime을 문자열로 변환
+        } for a in analysis_data
+    ]
 
-    # 추가된 사용자 정보 반환
+    # 사용자 정보와 스트레스 분석 정보 함께 반환
     return JSONResponse(
         content={
             "message": "로그인 성공", 
@@ -74,10 +90,12 @@ async def login(user: UserLogin, db: Session = Depends(get_db)):
             "user_gender": db_user.user_gender,
             "user_birthdate": db_user.user_birthdate.strftime('%Y-%m-%d') if db_user.user_birthdate else None,
             "user_job": db_user.user_job,
-            "user_sleep": db_user.user_sleep
+            "user_sleep": db_user.user_sleep,
+            "analysis_info": analysis_list  # 스트레스 분석 정보 추가
         },
         media_type="application/json; charset=utf-8"
     )
+
 
 # 회원가입 엔드포인트
 @router.post("/register")

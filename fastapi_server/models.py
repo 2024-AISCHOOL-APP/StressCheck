@@ -1,7 +1,9 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Date,PrimaryKeyConstraint,TIMESTAMP
+from decimal import Decimal  # Decimal을 올바르게 import
+from sqlalchemy import DECIMAL, Column, DateTime, Integer, String, ForeignKey, Date, PrimaryKeyConstraint, TIMESTAMP
 from sqlalchemy.orm import relationship
 from database import Base
 from datetime import datetime
+
 
 class MemberModel(Base):
     __tablename__ = "tb_member"
@@ -34,3 +36,13 @@ class HobbyModel(Base):
 
     # 관계 설정 (필요 시)
     member = relationship("MemberModel", back_populates="hobbies")
+    
+class AnalysisModel(Base):
+    __tablename__ = "tb_analysis"  # 테이블 이름이 올바르게 설정되었는지 확인
+
+    analysis_idx = Column(Integer, primary_key=True, index=True)
+    user_id = Column(String(50), ForeignKey("tb_member.user_id"))  # VARCHAR(50)로 길이 설정
+    stress_index = Column(DECIMAL)
+    analysis_result = Column(Integer)
+    analysis_details = Column(String(255))
+    created_at = Column(TIMESTAMP)

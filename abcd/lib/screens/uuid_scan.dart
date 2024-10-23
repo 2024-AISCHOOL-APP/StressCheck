@@ -4,7 +4,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 class DeviceServicesScreen extends StatefulWidget {
   final BluetoothDevice device;
 
-  const DeviceServicesScreen({Key? key, required this.device}) : super(key: key);
+  const DeviceServicesScreen({super.key, required this.device});
 
   @override
   _DeviceServicesScreenState createState() => _DeviceServicesScreenState();
