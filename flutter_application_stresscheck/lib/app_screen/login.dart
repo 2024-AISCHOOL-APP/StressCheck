@@ -56,7 +56,6 @@ class LoginPage extends StatelessWidget {
         // 스트레스 정보 출력 (디버깅 용도)
         print('스트레스 정보: $analysisInfo');
         
-
         // 로그인 성공 후 ResultPage로 이동
         Navigator.pushReplacement(
           context,
