@@ -8,7 +8,11 @@ from routers import auth
 app = FastAPI()
 
 # CORS 설정
-origins = ["http://localhost", "http://127.0.0.1:8000"]
+origins = [
+    "http://localhost",
+    "http://127.0.0.1:8000",
+    "http://192.168.70.42:8000"  # 여기서 192.168.70.42는 당신의 기기 IP 주소입니다.
+]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,

@@ -230,11 +230,11 @@ class _StressMapPageState extends State<StressMapPage> {
                 imagePath.isNotEmpty
                     ? Image.asset(
                         imagePath,
-                        width: MediaQuery.of(context).size.width * 0.15,
-                        height: MediaQuery.of(context).size.height * 0.05,
+                        width: MediaQuery.of(context).size.width * 0.13,
+                        height: MediaQuery.of(context).size.height * 0.03,
                         fit: BoxFit.contain,
                       )
-                    : SizedBox(height: MediaQuery.of(context).size.height * 0.05), // 이미지가 없을 경우 빈 공간으로 설정
+                    : SizedBox(height: MediaQuery.of(context).size.height * 0.03), // 이미지가 없을 경우 빈 공간으로 설정
               ],
             ),
           ),

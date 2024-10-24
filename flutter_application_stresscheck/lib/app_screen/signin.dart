@@ -15,42 +15,53 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
 
-  Future<void> _register() async {
-    if (_passwordController.text != _confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('비밀번호가 일치하지 않습니다.')));
-      return;
-    }
-
-    final response = await http.post(
-      Uri.parse('http://10.0.2.2:8000/auth/register'),
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-      body: json.encode({
-        'user_id': _userIdController.text,
-        'user_name': _nameController.text,
-        'user_pw': _passwordController.text,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      // 성공적으로 응답을 받았을 때
-      final Map<String, dynamic> responseData =
-          json.decode(utf8.decode(response.bodyBytes));
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(responseData['message'])));
-
-      // 로그인 페이지로 이동
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => LoginPage()));
-    } else {
-      final errorData = json.decode(utf8.decode(response.bodyBytes));
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('회원가입 실패: ${errorData['detail']}')));
-      print("Error: ${response.statusCode} - ${errorData['detail']}");
-    }
+  String getBaseUrl() {
+  // 현재 환경을 확인하고 적절한 URI를 반환합니다.
+  bool isEmulator = true; // 실제 환경에 맞게 이 값을 설정하세요.
+  if (isEmulator) {
+    return 'http://10.0.2.2:8000'; // 에뮬레이터에서 사용할 주소
+  } else {
+    return 'http://192.168.70.42:8000'; // 실제 기기에서 사용할 주소
   }
+}
+
+Future<void> _register() async {
+  if (_passwordController.text != _confirmPasswordController.text) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('비밀번호가 일치하지 않습니다.')));
+    return;
+  }
+
+  final response = await http.post(
+    Uri.parse('${getBaseUrl()}/auth/register'), // 동적으로 URI 설정
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+    },
+    body: json.encode({
+      'user_id': _userIdController.text,
+      'user_name': _nameController.text,
+      'user_pw': _passwordController.text,
+    }),
+  );
+
+  if (response.statusCode == 200) {
+    // 성공적으로 응답을 받았을 때
+    final Map<String, dynamic> responseData =
+        json.decode(utf8.decode(response.bodyBytes));
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(responseData['message'])));
+
+    // 로그인 페이지로 이동
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => LoginPage()));
+  } else {
+    final errorData = json.decode(utf8.decode(response.bodyBytes));
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('회원가입 실패: ${errorData['detail']}')));
+    print("Error: ${response.statusCode} - ${errorData['detail']}");
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
