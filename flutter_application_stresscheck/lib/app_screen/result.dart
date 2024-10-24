@@ -43,6 +43,17 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
     final userName = authProvider.userName;
     final isLoggedIn = authProvider.isLoggedIn;
 
+    // 바이탈 데이터 및 스트레스 정보 받아오기
+    final vitalData = authProvider.vitalInfo; // 바이탈 정보 리스트
+    final analysisInfo = authProvider.analysisInfo; // 스트레스 정보 리스트
+
+    // 로그 찍기
+    print('User ID: $userId');
+    print('User Name: $userName');
+    print('Is Logged In: $isLoggedIn');
+    print('Vital Data: $vitalData');
+    print('Analysis Info: $analysisInfo');
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -153,7 +164,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
   }
 
   // 하단 네비게이션바
-   Widget _buildCustomBottomAppBar(BuildContext context) {
+  Widget _buildCustomBottomAppBar(BuildContext context) {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       backgroundColor: Colors.white,
@@ -169,9 +180,8 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
             context,
             MaterialPageRoute(builder: (context) => StressMapPage()),
           );
-         
         } else if (index == 2) {
-          
+          // Do nothing
         } else if (index == 3) {
           Navigator.pushReplacement(
             context,
@@ -218,101 +228,130 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
 
   // 스트레스 상태를 보여주는 컨테이너
   Widget _buildStressStatusContainer(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20.0),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 2,
-            blurRadius: 3,
-            offset: Offset(0, 0),
-          ),
-        ],
-      ),
-      padding: EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('오늘의 스트레스 상태는',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Container(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text('보통',
-                          style: TextStyle(
-                              fontSize: 36, fontWeight: FontWeight.bold)),
-                      Text('  이에요',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600)),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Text('102',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black)),
-              ),
-            ],
-          ),
-          SizedBox(height: 16),
-          Center(
-            child: AnimatedBuilder(
-              animation: _animation,
-              builder: (context, child) {
-                return Transform.translate(
-                  offset: Offset(0, _animation.value),
-                  child: child,
-                );
-              },
-              child: Image.asset(
-                'image/soso.png',
-                width: MediaQuery.of(context).size.width * 0.5,
-                height: MediaQuery.of(context).size.width * 0.5,
-              ),
-            ),
-          ),
-          Center(
-            child: Text('이런 기분도 나쁘지 않아요.',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-          ),
-        ],
-      ),
-    );
+  // 최근 스트레스 데이터 가져오기
+  final analysisInfo = Provider.of<AuthProvider>(context).analysisInfo;
+  
+  // 가장 최근 스트레스 데이터
+  final latestAnalysis = (analysisInfo != null && analysisInfo.isNotEmpty) ? analysisInfo.last : null;
+  final stressIndex = latestAnalysis != null ? latestAnalysis['stress_index'] : null;
+  String stressLevel;
+  String moodMessage;
+  String imagePath;
+
+  if (stressIndex != null) {
+    // 스트레스 지수에 따른 상태 판단
+    if (stressIndex >= 47 && stressIndex <= 53) {
+      stressLevel = '보통';
+      moodMessage = '이런 기분도 나쁘지 않아요.';
+      imagePath = 'image/soso.png';
+    } else if (stressIndex < 47) {
+      stressLevel = '좋음';
+      moodMessage = '오늘은 기분이 좋네요!';
+      imagePath = 'image/happy.png';
+    } else {
+      stressLevel = '나쁨';
+      moodMessage = '괜찮아요 그럴수있죠.. 힘내요!';
+      imagePath = 'image/angry.png';
+    }
+  } else {
+    stressLevel = ''; // 스트레스 상태를 비워둡니다.
+    moodMessage = ''; // 기분 메시지도 비워둡니다.
+    imagePath = ''; // 이미지 경로를 비워둡니다.
   }
 
-  // 측정 데이터 컨테이너
-  Widget _buildMeasurementContainers(BuildContext context) {
-    return Column(
+  return Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20.0),
+      color: Colors.white,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.1),
+          spreadRadius: 2,
+          blurRadius: 3,
+          offset: Offset(0, 0),
+        ),
+      ],
+    ),
+    padding: EdgeInsets.all(16.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text('지금의 스트레스 상태는....',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _measurementContainer(context, '심박수', '90', 'BPM'),
-            _measurementContainer(context, '산소포화도', '95', '%'),
+            Expanded(
+              child: Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(stressLevel.isNotEmpty ? stressLevel : '...',
+                        style: TextStyle(
+                            fontSize: 36, fontWeight: FontWeight.bold)),
+                    Text('',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600)),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: Text(stressIndex != null ? '${stressIndex.toInt()}' : '...',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black)),
+            ),
           ],
         ),
         SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _measurementContainer(context, '체온', '36.5', '도'),
-            _measurementContainer(context, '혈압', '118', 'mmHg'),
-          ],
+        Center(
+          child: imagePath.isNotEmpty
+              ? Image.asset(
+                  imagePath,
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: MediaQuery.of(context).size.width * 0.5,
+                )
+              : SizedBox.shrink(), // 이미지가 없을 경우 빈 위젯을 반환
+        ),
+        Center(
+          child: Text(moodMessage.isNotEmpty ? moodMessage : '...',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
         ),
       ],
-    );
-  }
+    ),
+  );
+}
+
+
+
+  // 측정 데이터 컨테이너
+  Widget _buildMeasurementContainers(BuildContext context) {
+  // AuthProvider에서 바이탈 정보 가져오기
+  final vitalInfo = Provider.of<AuthProvider>(context).vitalInfo;
+
+  // 가장 최신 바이탈 데이터 가져오기
+  final latestVital = (vitalInfo != null && vitalInfo.isNotEmpty) ? vitalInfo.last : null;
+
+  // heart_rate와 hrv 데이터 초기화
+  String heartRate = latestVital != null ? latestVital['heart_rate'].toInt().toString() : '...';
+  String hrv = latestVital != null ? latestVital['hrv'].toInt().toString() : '...';
+
+  return Column(
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _measurementContainer(context, 'HR', heartRate, 'BPM'),
+          _measurementContainer(context, 'HRV', hrv, '%'),
+        ],
+      ),
+    ],
+  );
+}
+
 
   // 측정 데이터를 보여주는 개별 컨테이너
   Widget _measurementContainer(BuildContext context, String title, String value, String unit) {
