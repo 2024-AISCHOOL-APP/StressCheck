@@ -14,6 +14,8 @@ dependencies:
   intl: ^0.17.0 # 여기에 intl 패키지를 추가합니다.
   http: ^1.2.2
   provider: ^6.0.5
+  fl_chart: ^0.69.0
+
 
 dev_dependencies:
   flutter_test:
