@@ -33,6 +33,7 @@ class LoginPage extends StatelessWidget {
         String? userJob = responseData['user_job'];
         int? userSleep = responseData['user_sleep'];
         List<dynamic>? analysisInfo = responseData['analysis_info']; // 스트레스 정보
+        List<dynamic>? vitalInfo = responseData['vital_info']; // tb_vital 정보 추가
 
         // userId와 userName이 null인 경우 처리
         if (userId == null || userName == null) {
@@ -51,10 +52,12 @@ class LoginPage extends StatelessWidget {
           userJob ?? 'N/A',
           userSleep ?? 0,  // null일 경우 기본값 설정
           analysisInfo ?? [], // 스트레스 정보 리스트 null 처리
+          vitalInfo ?? [], // tb_vital 정보 리스트 추가
         );
 
-        // 스트레스 정보 출력 (디버깅 용도)
+        // 스트레스 정보 및 vital 정보 출력 (디버깅 용도)
         print('스트레스 정보: $analysisInfo');
+        print('Vital 정보: $vitalInfo');
         
         // 로그인 성공 후 ResultPage로 이동
         Navigator.pushReplacement(

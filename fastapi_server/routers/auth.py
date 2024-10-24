@@ -5,7 +5,7 @@ from models import MemberModel, HobbyModel
 from pydantic import BaseModel
 from passlib.context import CryptContext
 from fastapi.responses import JSONResponse
-from models import AnalysisModel  # AnalysisModel을 models에서 가져오기
+from models import AnalysisModel,VitalModel   # AnalysisModel을 models에서 가져오기
 
 
 router = APIRouter()
@@ -50,7 +50,6 @@ def get_db():
         db.close()
 
 # 로그인 엔드포인트
-# 로그인 엔드포인트
 @router.post("/login")
 async def login(user: UserLogin, db: Session = Depends(get_db)):
     # 로그인한 사용자 찾기
@@ -61,7 +60,7 @@ async def login(user: UserLogin, db: Session = Depends(get_db)):
             content={"detail": "사용자가 존재하지 않습니다."},
             media_type="application/json; charset=utf-8"
         )
-    
+
     # 비밀번호 검증
     if not pwd_context.verify(user.user_pw, db_user.user_pw):
         return JSONResponse(
@@ -69,7 +68,7 @@ async def login(user: UserLogin, db: Session = Depends(get_db)):
             content={"detail": "로그인 정보가 잘못되었습니다."},
             media_type="application/json; charset=utf-8"
         )
-    
+
     # 스트레스 분석 정보 불러오기
     analysis_data = db.query(AnalysisModel).filter(AnalysisModel.user_id == db_user.user_id).all()
     analysis_list = [
@@ -81,20 +80,36 @@ async def login(user: UserLogin, db: Session = Depends(get_db)):
         } for a in analysis_data
     ]
 
-    # 사용자 정보와 스트레스 분석 정보 함께 반환
+    # tb_vital 정보 불러오기
+    vital_data = db.query(VitalModel).filter(VitalModel.user_id == db_user.user_id).all()
+    vital_list = [
+        {
+            "heart_rate": float(v.heart_rate),  # Decimal을 float으로 변환
+            "respiration_rate": float(v.respiration_rate) if v.respiration_rate is not None else None,
+            "spo2": float(v.spo2) if v.spo2 is not None else None,
+            "ecg": float(v.ecg) if v.ecg is not None else None,
+            "created_at": v.created_at.strftime('%Y-%m-%d %H:%M:%S') if v.created_at else None,  # datetime을 문자열로 변환
+            "hrv": int(v.hrv) if v.hrv is not None else None  # HRV를 int로 변환
+        } for v in vital_data
+    ]
+
+    # 사용자 정보와 스트레스 분석 정보, 바이탈 정보 함께 반환
     return JSONResponse(
         content={
-            "message": "로그인 성공", 
-            "user_id": db_user.user_id, 
+            "message": "로그인 성공",
+            "user_id": db_user.user_id,
             "user_name": db_user.user_name,
             "user_gender": db_user.user_gender,
             "user_birthdate": db_user.user_birthdate.strftime('%Y-%m-%d') if db_user.user_birthdate else None,
             "user_job": db_user.user_job,
             "user_sleep": db_user.user_sleep,
-            "analysis_info": analysis_list  # 스트레스 분석 정보 추가
+            "analysis_info": analysis_list,  # 스트레스 분석 정보 추가
+            "vital_info": vital_list  # 바이탈 정보 추가
         },
         media_type="application/json; charset=utf-8"
     )
+
+
 
 
 # 회원가입 엔드포인트
