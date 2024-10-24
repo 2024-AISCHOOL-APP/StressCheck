@@ -4,10 +4,10 @@ import 'package:intl/intl.dart';
 import 'result.dart';
 import 'first.dart';
 import 'mypage.dart';
-
+import 'auth_provider.dart'; // AuthProvider import
+import 'package:provider/provider.dart'; // Provider import 추가
 
 // 캘린더
-
 class StressMapPage extends StatefulWidget {
   @override
   _StressMapPageState createState() => _StressMapPageState();
@@ -18,9 +18,57 @@ class _StressMapPageState extends State<StressMapPage> {
   DateTime? _selectedDay;
   Map<String, String> _diaryEntries = {}; // 날짜별 일기 데이터를 저장하는 Map
   TextEditingController _diaryController = TextEditingController(); // 다이어리 입력 컨트롤러
+  Map<String, double> averageStress = {}; // 날짜별 평균 스트레스 지수 저장
 
   PageController _pageController = PageController(initialPage: 500); // 중앙을 기준으로 설정
   int _currentPageIndex = 500; // 중앙을 기준으로 페이지 인덱스 초기화
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Provider에서 분석 정보 가져오기
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final analysisInfo = authProvider.analysisInfo; // 분석 정보 가져오기
+
+    // 분석 정보가 null이거나 비어있는지 체크
+    if (analysisInfo != null && analysisInfo.isNotEmpty) {
+      // 로그 찍기
+      print('분석정보: $analysisInfo');
+
+      // 평균 스트레스 지수 계산
+      averageStress = calculateDailyAverages(analysisInfo);
+
+      // 평균 스트레스 로그 찍기
+      print('일별 평균 스트레스: $averageStress');
+    } else {
+      print('Analysis Info is null or empty');
+    }
+  }
+
+  Map<String, double> calculateDailyAverages(List<dynamic> analysisInfo) {
+    Map<String, List<double>> stressPerDay = {};
+
+    // 분석 정보에서 각 날짜의 스트레스 지수를 분류
+    for (var entry in analysisInfo) {
+      DateTime createdAt = DateTime.parse(entry['created_at']);
+      String day = DateFormat('yyyy-MM-dd').format(createdAt);
+
+      if (!stressPerDay.containsKey(day)) {
+        stressPerDay[day] = [];
+      }
+      stressPerDay[day]!.add(entry['stress_index']);
+    }
+
+    // 날짜별 평균 계산
+    Map<String, double> dailyAverages = {};
+    stressPerDay.forEach((day, stressList) {
+      double avg = stressList.reduce((a, b) => a + b) / stressList.length;
+      dailyAverages[day] = avg;
+    });
+
+    return dailyAverages;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,14 +86,10 @@ class _StressMapPageState extends State<StressMapPage> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  SizedBox(
-                    height: 16,
-                  ),
+                  SizedBox(height: 16),
                   _buildHeader(),
                   _buildDaysOfWeek(),
-                  SizedBox(
-                    height: 8,
-                  ),
+                  SizedBox(height: 8),
                   _buildPageViewCalendar(),
                 ],
               ),
@@ -131,14 +175,26 @@ class _StressMapPageState extends State<StressMapPage> {
         }
 
         bool isToday = _isSameDay(day, DateTime.now());
-
         bool isSelected = _selectedDay != null && _isSameDay(day, _selectedDay!);
+        String formattedDate = _formatDate(day);
+        String imagePath = '';
+
+        // 평균 스트레스 지수에 따라 이미지 선택
+        if (averageStress.containsKey(formattedDate)) {
+          double avgStress = averageStress[formattedDate]!;
+          if (avgStress >= 49 && avgStress <= 53) {
+            imagePath = 'image/soso.png';
+          } else if (avgStress < 49) {
+            imagePath = 'image/happy.png';
+          } else {
+            imagePath = 'image/angry.png';
+          }
+        }
 
         return GestureDetector(
           onTap: () {
             setState(() {
               _selectedDay = day;
-              String formattedDate = _formatDate(day);
               _diaryController.text = _diaryEntries[formattedDate] ?? ''; // 선택된 날짜의 다이어리 불러오기
             });
             _showDiaryDialog(); // 날짜를 누르면 다이어리 팝업 표시
@@ -161,9 +217,7 @@ class _StressMapPageState extends State<StressMapPage> {
             ),
             child: Column(
               children: [
-                SizedBox(
-                  height: 8,
-                ),
+                SizedBox(height: 8),
                 Text(
                   '${day.day}',
                   style: TextStyle(
@@ -173,12 +227,14 @@ class _StressMapPageState extends State<StressMapPage> {
                   ),
                 ),
                 SizedBox(height: 8),
-                Image.asset(
-                  'image/angry.png',
-                  width: MediaQuery.of(context).size.width * 0.1,
-                  height: MediaQuery.of(context).size.height * 0.03,
-                  fit: BoxFit.contain,
-                ),
+                imagePath.isNotEmpty
+                    ? Image.asset(
+                        imagePath,
+                        width: MediaQuery.of(context).size.width * 0.15,
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        fit: BoxFit.contain,
+                      )
+                    : SizedBox(height: MediaQuery.of(context).size.height * 0.05), // 이미지가 없을 경우 빈 공간으로 설정
               ],
             ),
           ),

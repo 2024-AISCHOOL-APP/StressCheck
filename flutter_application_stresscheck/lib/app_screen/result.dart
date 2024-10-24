@@ -227,10 +227,10 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
   }
 
   // 스트레스 상태를 보여주는 컨테이너
-  Widget _buildStressStatusContainer(BuildContext context) {
+Widget _buildStressStatusContainer(BuildContext context) {
   // 최근 스트레스 데이터 가져오기
   final analysisInfo = Provider.of<AuthProvider>(context).analysisInfo;
-  
+
   // 가장 최근 스트레스 데이터
   final latestAnalysis = (analysisInfo != null && analysisInfo.isNotEmpty) ? analysisInfo.last : null;
   final stressIndex = latestAnalysis != null ? latestAnalysis['stress_index'] : null;
@@ -256,7 +256,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
   } else {
     stressLevel = ''; // 스트레스 상태를 비워둡니다.
     moodMessage = ''; // 기분 메시지도 비워둡니다.
-    imagePath = ''; // 이미지 경로를 비워둡니다.
+    imagePath = 'image/need_login.png'; // 로그인 필요 이미지
   }
 
   return Container(
@@ -276,7 +276,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('지금의 스트레스 상태는....',
+        Text('지금의 스트레스 상태는...',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -286,7 +286,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(stressLevel.isNotEmpty ? stressLevel : '...',
+                    Text(stressLevel.isNotEmpty ? stressLevel : '',
                         style: TextStyle(
                             fontSize: 36, fontWeight: FontWeight.bold)),
                     Text('',
@@ -297,7 +297,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
               ),
             ),
             Expanded(
-              child: Text(stressIndex != null ? '${stressIndex.toInt()}' : '...',
+              child: Text(stressIndex != null ? '${stressIndex.toInt()}' : '',
                   textAlign: TextAlign.right,
                   style: TextStyle(
                       fontSize: 40,
@@ -308,22 +308,21 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
         ),
         SizedBox(height: 16),
         Center(
-          child: imagePath.isNotEmpty
-              ? Image.asset(
-                  imagePath,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  height: MediaQuery.of(context).size.width * 0.5,
-                )
-              : SizedBox.shrink(), // 이미지가 없을 경우 빈 위젯을 반환
+          child: Image.asset(
+            imagePath,
+            width: MediaQuery.of(context).size.width * 0.5,
+            height: MediaQuery.of(context).size.width * 0.5,
+          ),
         ),
         Center(
-          child: Text(moodMessage.isNotEmpty ? moodMessage : '...',
+          child: Text(moodMessage.isNotEmpty ? moodMessage : '',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
         ),
       ],
     ),
   );
 }
+
 
 
 
@@ -336,8 +335,8 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
   final latestVital = (vitalInfo != null && vitalInfo.isNotEmpty) ? vitalInfo.last : null;
 
   // heart_rate와 hrv 데이터 초기화
-  String heartRate = latestVital != null ? latestVital['heart_rate'].toInt().toString() : '...';
-  String hrv = latestVital != null ? latestVital['hrv'].toInt().toString() : '...';
+  String heartRate = latestVital != null ? latestVital['heart_rate'].toInt().toString() : '';
+  String hrv = latestVital != null ? latestVital['hrv'].toInt().toString() : '';
 
   return Column(
     children: [
