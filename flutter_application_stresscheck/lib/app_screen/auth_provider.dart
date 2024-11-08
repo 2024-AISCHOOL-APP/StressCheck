@@ -10,6 +10,7 @@ class AuthProvider with ChangeNotifier {
   String? _userJob;  // user_job 저장
   int? _userSleep;  // user_sleep 저장
   List<dynamic>? _analysisInfo;  // 스트레스 정보 리스트
+  List<dynamic>? _vitalInfo;  // 바이탈 정보 리스트 추가
 
   bool get isLoggedIn => _userId != null;
   String? get userId => _userId;
@@ -19,9 +20,9 @@ class AuthProvider with ChangeNotifier {
   String? get userJob => _userJob;
   int? get userSleep => _userSleep;
   List<dynamic>? get analysisInfo => _analysisInfo;  // 스트레스 정보 가져오기
+  List<dynamic>? get vitalInfo => _vitalInfo;  // 바이탈 정보 가져오기
 
-  void login(String userId, String userName, String userGender, String userBirthdate, String userJob, int userSleep, List<dynamic> analysisInfo) {
-    print("로그인 시 받아온 스트레스 정보: $analysisInfo"); // 여기서 출력
+  void login(String userId, String userName, String userGender, String userBirthdate, String userJob, int userSleep, List<dynamic> analysisInfo, List<dynamic> vitalInfo) {
     _userId = userId;
     _userName = userName;
     _userGender = userGender;
@@ -29,6 +30,7 @@ class AuthProvider with ChangeNotifier {
     _userJob = userJob;
     _userSleep = userSleep;
     _analysisInfo = analysisInfo;  // 스트레스 정보 저장
+    _vitalInfo = vitalInfo;  // 바이탈 정보 저장
     notifyListeners();
 }
 
@@ -50,6 +52,7 @@ class AuthProvider with ChangeNotifier {
     _userJob = null;
     _userSleep = null;
     _analysisInfo = null;  // 스트레스 정보 초기화
+    _vitalInfo = null;  // 바이탈 정보 초기화
     notifyListeners();
   }
 }

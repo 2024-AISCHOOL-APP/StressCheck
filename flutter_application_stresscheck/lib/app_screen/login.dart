@@ -10,71 +10,86 @@ class LoginPage extends StatelessWidget {
   final TextEditingController _userIdController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  Future<void> _login(BuildContext context) async {
-    try {
-      final response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/auth/login'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'user_id': _userIdController.text,
-          'user_pw': _passwordController.text,
-        }),
+  String getBaseUrl() {
+  // 현재 환경을 확인하고 적절한 URI를 반환합니다.
+  bool isEmulator = false; // 실제 환경에 맞게 이 값을 설정하세요.
+  if (isEmulator) {
+    return 'http://10.0.2.2:8000'; // 에뮬레이터에서 사용할 주소
+  } else {
+    return 'http://192.168.70.42:8000'; // 실제 기기에서 사용할 주소
+  }
+}
+
+Future<void> _login(BuildContext context) async {
+  try {
+    final response = await http.post(
+      Uri.parse('${getBaseUrl()}/auth/login'), // 동적으로 URI 설정
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'user_id': _userIdController.text,
+        'user_pw': _passwordController.text,
+      }),
+
+    );
+
+    if (response.statusCode == 200) {
+      // 서버 응답을 디코딩
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      // 서버에서 받은 모든 정보
+      String? userId = responseData['user_id'];
+      String? userName = responseData['user_name'];
+      String? userGender = responseData['user_gender'];
+      String? userBirthdate = responseData['user_birthdate'];
+      String? userJob = responseData['user_job'];
+      int? userSleep = responseData['user_sleep'];
+      List<dynamic>? analysisInfo = responseData['analysis_info']; // 스트레스 정보
+      List<dynamic>? vitalInfo = responseData['vital_info']; // tb_vital 정보 추가
+
+      // userId와 userName이 null인 경우 처리
+      if (userId == null || userName == null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('로그인 응답에 user_id 또는 user_name이 없습니다.'),
+        ));
+        return;
+      }
+
+      // AuthProvider에 모든 정보 저장
+      Provider.of<AuthProvider>(context, listen: false).login(
+        userId,
+        userName,
+        userGender ?? 'N/A',  // null일 경우 기본값 설정
+        userBirthdate ?? 'N/A',
+        userJob ?? 'N/A',
+        userSleep ?? 0,  // null일 경우 기본값 설정
+        analysisInfo ?? [], // 스트레스 정보 리스트 null 처리
+        vitalInfo ?? [], // tb_vital 정보 리스트 추가
       );
 
-      if (response.statusCode == 200) {
-        // 서버 응답을 디코딩
-        final Map<String, dynamic> responseData = json.decode(response.body);
-
-        // 서버에서 받은 모든 정보
-        String? userId = responseData['user_id'];
-        String? userName = responseData['user_name'];
-        String? userGender = responseData['user_gender'];
-        String? userBirthdate = responseData['user_birthdate'];
-        String? userJob = responseData['user_job'];
-        int? userSleep = responseData['user_sleep'];
-        List<dynamic>? analysisInfo = responseData['analysis_info']; // 스트레스 정보
-
-        // userId와 userName이 null인 경우 처리
-        if (userId == null || userName == null) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('로그인 응답에 user_id 또는 user_name이 없습니다.'),
-          ));
-          return;
-        }
-
-        // AuthProvider에 모든 정보 저장
-        Provider.of<AuthProvider>(context, listen: false).login(
-          userId,
-          userName,
-          userGender ?? 'N/A',  // null일 경우 기본값 설정
-          userBirthdate ?? 'N/A',
-          userJob ?? 'N/A',
-          userSleep ?? 0,  // null일 경우 기본값 설정
-          analysisInfo ?? [], // 스트레스 정보 리스트 null 처리
-        );
-
-        // 스트레스 정보 출력 (디버깅 용도)
-        print('스트레스 정보: $analysisInfo');
-        
-        // 로그인 성공 후 ResultPage로 이동
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => ResultPage()),
-        );
-      } else {
-        final Map<String, dynamic> errorData = json.decode(response.body);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('로그인 실패: ${errorData['detail'] ?? '알 수 없는 오류'}'),
-        ));
-      }
-    } catch (error) {
-      // 네트워크 또는 다른 오류 처리
-      print('Error during login: $error');
+      // 스트레스 정보 및 vital 정보 출력 (디버깅 용도)
+      print('스트레스 정보: $analysisInfo');
+      print('Vital 정보: $vitalInfo');
+      
+      // 로그인 성공 후 ResultPage로 이동
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => ResultPage()),
+      );
+    } else {
+      final Map<String, dynamic> errorData = json.decode(response.body);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('로그인 중 오류가 발생했습니다.'),
+        content: Text('로그인 실패: ${errorData['detail'] ?? '알 수 없는 오류'}'),
       ));
     }
+  } catch (error) {
+    // 네트워크 또는 다른 오류 처리
+    print('Error during login: $error');
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('로그인 중 오류가 발생했습니다.'),
+    ));
   }
+}
+
 
   @override
   Widget build(BuildContext context) {

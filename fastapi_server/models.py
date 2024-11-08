@@ -22,6 +22,9 @@ class MemberModel(Base):
     # 취미와의 관계 설정
     hobbies = relationship("HobbyModel", back_populates="member")
 
+    # VitalModel과의 관계 설정
+    vitals = relationship("VitalModel", back_populates="member")
+
 class HobbyModel(Base):
     __tablename__ = "tb_hobby"
 
@@ -46,3 +49,24 @@ class AnalysisModel(Base):
     analysis_result = Column(Integer)
     analysis_details = Column(String(255))
     created_at = Column(TIMESTAMP)
+    
+
+
+
+class VitalModel(Base):
+    __tablename__ = "tb_vital"
+
+    vital_idx = Column(Integer, primary_key=True, index=True)  # Primary key
+    user_id = Column(String(50), ForeignKey("tb_member.user_id"))  # 사용자 ID
+    heart_rate = Column(Integer)  # 심박수
+    respiration_rate = Column(Integer)  # 호흡수
+    spo2 = Column(Integer)  # 산소포화도
+    ecg = Column(Integer)  # ECG
+    created_at = Column(DateTime)  # 생성일시 추가
+    hrv = Column(Integer)  # HRV
+
+    # Member와의 관계 설정
+    member = relationship("MemberModel", back_populates="vitals")
+
+
+
